@@ -1,0 +1,62 @@
+<html
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
+    data-namespace-typo3-fluid="true"
+>
+
+<f:layout name="Module" />
+
+<f:section name="Content">
+    <h1>Plugins analysis</h1>
+
+    <f:render partial="BackButton" arguments="{route: 'tools_ContentUsage'}" />
+
+    <div class="table-fit">
+        <table class="table table-striped table-hover">
+            <thead>
+            <tr>
+                <th style="width:50px;"></th>
+                <th>Plugin</th>
+                <th>Label</th>
+                <th style="text-align:right;">Active contents</th>
+                <th style="text-align:right;">Disabled contents</th>
+                <th style="text-align:right;">Deleted contents</th>
+            </tr>
+            </thead>
+            <tbody>
+            <f:for each="{plugins}" as="plugin">
+                <tr>
+                    <td>
+                        <f:if condition="{plugin.icon}">
+                            <core:icon identifier="{plugin.icon}" />
+                        </f:if>
+                    </td>
+                    <td>{plugin.id}</td>
+                    <td>{plugin.label}</td>
+                    <td style="text-align:right;">
+                        {plugin.totalActiveContents}
+                        <f:be.link route="tools_ContentUsage" parameters="{action: 'listTypeDetail', listType: plugin.id, status: 'active'}" class="btn btn-default">
+                            <core:icon identifier="actions-file-view" />
+                        </f:be.link>
+                    </td>
+                    <td style="text-align:right;">
+                        {plugin.totalDisabledContents}
+                        <f:be.link route="tools_ContentUsage" parameters="{action: 'listTypeDetail', listType: plugin.id, status: 'disabled'}" class="btn btn-default">
+                            <core:icon identifier="actions-file-view" />
+                        </f:be.link>
+                    </td>
+                    <td style="text-align:right;">
+                        {plugin.totalDeletedContents}
+                        <f:be.link route="tools_ContentUsage" parameters="{action: 'listTypeDetail', listType: plugin.id, status: 'deleted'}" class="btn btn-default">
+                            <core:icon identifier="actions-file-view" />
+                        </f:be.link>
+                    </td>
+                </tr>
+            </f:for>
+            </tbody>
+        </table>
+    </div>
+
+    <f:render partial="BackButton" arguments="{route: 'tools_ContentUsage'}" />
+
+</f:section>
