@@ -1,0 +1,62 @@
+<html
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
+    data-namespace-typo3-fluid="true"
+>
+
+<f:layout name="Module" />
+
+<f:section name="Content">
+    <h1>Content types analysis</h1>
+
+    <f:render partial="BackButton" arguments="{action: 'main'}" />
+
+    <div class="table-fit">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th style="width:50px;"></th>
+                    <th>CType</th>
+                    <th>Label</th>
+                    <th style="text-align:right;">Active contents</th>
+                    <th style="text-align:right;">Disabled contents</th>
+                    <th style="text-align:right;">Deleted contents</th>
+                </tr>
+            </thead>
+            <tbody>
+                <f:for each="{ctypes}" as="ctype">
+                    <tr>
+                        <td>
+                            <f:if condition="{ctype.icon}">
+                                <core:icon identifier="{ctype.icon}" />
+                            </f:if>
+                        </td>
+                        <td>{ctype.id}</td>
+                        <td>{ctype.label}</td>
+                        <td style="text-align:right;">
+                            {ctype.totalActiveContents}
+                            <f:link.action action="ctypeDetail" arguments="{ctypeName: ctype.id, status: 'active'}" class="btn btn-default">
+                                <core:icon identifier="actions-view-page" />
+                            </f:link.action>
+                        </td>
+                        <td style="text-align:right;">
+                            {ctype.totalDisabledContents}
+                            <f:link.action action="ctypeDetail" arguments="{ctypeName: ctype.id, status: 'disabled'}" class="btn btn-default">
+                                <core:icon identifier="actions-view-page" />
+                            </f:link.action>
+                        </td>
+                        <td style="text-align:right;">
+                            {ctype.totalDeletedContents}
+                            <f:link.action action="ctypeDetail" arguments="{ctypeName: ctype.id, status: 'deleted'}" class="btn btn-default">
+                                <core:icon identifier="actions-view-page" />
+                            </f:link.action>
+                        </td>
+                    </tr>
+                </f:for>
+            </tbody>
+        </table>
+    </div>
+
+    <f:render partial="BackButton" arguments="{action: 'main'}" />
+
+</f:section>

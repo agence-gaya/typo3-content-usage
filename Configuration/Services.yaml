@@ -1,0 +1,10 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  GAYA\ContentUsage\:
+    resource: '../Classes/*'
+
+  GAYA\ContentUsage\Controller\ReportController:
+    tags: ['backend.controller']

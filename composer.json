@@ -1,0 +1,39 @@
+{
+  "name": "gaya/typo3-content-usage",
+  "description": "Content usage analysis",
+  "type": "typo3-cms-extension",
+  "license": "GPL-2.0+",
+  "version": "9.0.0",
+  "keywords": [
+    "typo3",
+    "content",
+    "usage",
+    "report",
+    "doktype",
+    "ctype",
+    "list_type"
+  ],
+  "authors": [
+    {
+      "name": "GAYA",
+      "email": "contact@gaya.fr",
+      "homepage": "https://www.gaya.fr",
+      "role": "maintainer"
+    }
+  ],
+  "require": {
+    "php": "^7.3",
+    "typo3/cms-core": "^9.5",
+    "typo3/cms-extbase": "^9.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "GAYA\\ContentUsage\\": "Classes/"
+    }
+  },
+  "extra": {
+    "typo3/cms": {
+      "extension-key": "content_usage"
+    }
+  }
+}

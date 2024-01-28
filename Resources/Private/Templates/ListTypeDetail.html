@@ -1,0 +1,66 @@
+<html
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
+    xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers"
+    xmlns:cu="http://typo3.org/ns/GAYA/ContentUsage/ViewHelpers"
+    data-namespace-typo3-fluid="true"
+>
+
+<f:layout name="Module" />
+
+<f:section name="Content">
+    <h1>Usage of plugin "{plugin.label}" ({status})</h1>
+
+    <f:render partial="BackButton" arguments="{action: 'listTypes'}" />
+
+    <f:switch expression="{status}">
+        <f:case value="active"><f:render section="TableContent" arguments="{contents: plugin.activeContents, status: status}" /></f:case>
+        <f:case value="disabled">
+            <p>Note: a content with a past publication date is classified as disabled.</p>
+            <f:render section="TableContent" arguments="{contents: plugin.disabledContents, status: status}" />
+        </f:case>
+        <f:case value="deleted"><f:render section="TableContent" arguments="{contents: plugin.deletedContents, status: status}" /></f:case>
+    </f:switch>
+
+    <f:render partial="BackButton" arguments="{action: 'listTypes'}" />
+
+</f:section>
+
+<f:section name="TableContent">
+    <div class="table-fit">
+        <table class="table table-striped table-hover">
+            <thead>
+            <tr>
+                <th>Uid</th>
+                <th>Pid</th>
+                <th>Header</th>
+                <th>Sys Language Uid</th>
+                <th>Workspace Id</th>
+                <th style="width:100px;"></th>
+            </tr>
+            </thead>
+            <tbody>
+                <f:for each="{contents}" as="content">
+                    <tr>
+                        <td>{content.uid}</td>
+                        <td>{content.pid}</td>
+                        <td>{content.header}</td>
+                        <td>{content.sysLanguageUid}</td>
+                        <td>{content.t3verWsid}</td>
+                        <td>
+                            <f:if condition="{status} != deleted">
+                                <f:then>
+                                    <cu:be.link route="web_layout" parameters="{id: content.pid}" anchor="element-tt_content-{content.uid}" class="btn btn-default"><core:icon identifier="actions-view-page" /></cu:be.link>
+                                    <be:link.editRecord uid="{content.uid}" table="tt_content" class="btn btn-default"><core:icon identifier="actions-open" /></be:link.editRecord>
+                                </f:then>
+                                <f:else>
+                                    <f:be.link route="web_RecyclerRecycler" class="btn btn-default"><core:icon identifier="actions-view-page" /></f:be.link>
+                                </f:else>
+                            </f:if>
+                        </td>
+                    </tr>
+                </f:for>
+            </tbody>
+        </table>
+    </div>
+</f:section>

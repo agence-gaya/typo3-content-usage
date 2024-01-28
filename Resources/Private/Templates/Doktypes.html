@@ -1,0 +1,62 @@
+<html
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
+    data-namespace-typo3-fluid="true"
+>
+
+<f:layout name="Module" />
+
+<f:section name="Content">
+    <h1>Doktypes analysis</h1>
+
+    <f:render partial="BackButton" arguments="{action: 'main'}" />
+
+    <div class="table-fit">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th style="width:50px;"></th>
+                    <th>Doktype</th>
+                    <th>Label</th>
+                    <th style="text-align:right;">Active pages</th>
+                    <th style="text-align:right;">Disabled pages</th>
+                    <th style="text-align:right;">Deleted pages</th>
+                </tr>
+            </thead>
+            <tbody>
+                <f:for each="{doktypes}" as="doktype">
+                    <tr>
+                        <td>
+                            <f:if condition="{doktype.icon}">
+                                <core:icon identifier="{doktype.icon}" />
+                            </f:if>
+                        </td>
+                        <td>{doktype.id}</td>
+                        <td>{doktype.label}</td>
+                        <td style="text-align:right;">
+                            {doktype.totalActivePages}
+                            <f:link.action action="doktypeDetail" arguments="{doktypeId: doktype.id, status: 'active'}" class="btn btn-default">
+                                <core:icon identifier="actions-view-page" />
+                            </f:link.action>
+                        </td>
+                        <td style="text-align:right;">
+                            {doktype.totalDisabledPages}
+                            <f:link.action action="doktypeDetail" arguments="{doktypeId: doktype.id, status: 'disabled'}" class="btn btn-default">
+                                <core:icon identifier="actions-view-page" />
+                            </f:link.action>
+                        </td>
+                        <td style="text-align:right;">
+                            {doktype.totalDeletedPages}
+                            <f:link.action action="doktypeDetail" arguments="{doktypeId: doktype.id, status: 'deleted'}" class="btn btn-default">
+                                <core:icon identifier="actions-view-page" />
+                            </f:link.action>
+                        </td>
+                    </tr>
+                </f:for>
+            </tbody>
+        </table>
+    </div>
+
+    <f:render partial="BackButton" arguments="{action: 'main'}" />
+
+</f:section>
