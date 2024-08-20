@@ -4,10 +4,14 @@ declare(strict_types=1);
 
 namespace GAYA\ContentUsage\Domain\Repository;
 
+use GAYA\ContentUsage\Domain\Model\Content;
+use GAYA\ContentUsage\Domain\Model\Page;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Expression\CompositeExpression;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
+use TYPO3\CMS\Core\DataHandling\TableColumnType;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Persistence\Generic\Mapper\ColumnMap;
 use TYPO3\CMS\Extbase\Persistence\Generic\Mapper\DataMapper;
 
 abstract class AbstractRepository
@@ -17,6 +21,20 @@ abstract class AbstractRepository
     public function __construct(DataMapper $dataMapper)
     {
         $this->dataMapper = $dataMapper;
+
+        // sys_language_uid and t3ver_wsid fields are not configured in TCA, so the dataMapper won't map it because it's a "non persistable property" for him
+        // To fix that, we manually add the fields in the dataMapper
+        foreach ([Page::class, Content::class] as $class) {
+            $dataMap = $this->dataMapper->getDataMap($class);
+
+            $columnMap = GeneralUtility::makeInstance(ColumnMap::class, 'sys_language_uid', 'sysLanguageUid');
+            $columnMap->setType(new TableColumnType(TableColumnType::PASSTHROUGH));
+            $dataMap->addColumnMap($columnMap);
+
+            $columnMap = GeneralUtility::makeInstance(ColumnMap::class, 't3ver_wsid', 't3verWsid');
+            $columnMap->setType(new TableColumnType(TableColumnType::PASSTHROUGH));
+            $dataMap->addColumnMap($columnMap);
+        }
     }
 
     abstract protected function getTableName(): string;
