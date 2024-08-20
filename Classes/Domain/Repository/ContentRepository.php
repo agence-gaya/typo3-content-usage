@@ -33,7 +33,7 @@ class ContentRepository extends AbstractRepository
     {
         $queryBuilder = $this->getQueryBuilder('active');
         $this->addConstraintsForCtype($queryBuilder, $ctype);
-        $queryBuilder->select('uid', 'pid', 'header', 'ctype', 'list_type');
+        $queryBuilder->select('uid', 'pid', 'header', 'ctype', 'list_type', 'sys_language_uid', 't3ver_wsid');
 
         return $this->dataMapper->map(Content::class, $queryBuilder->executeQuery()->fetchAllAssociative());
     }
@@ -55,7 +55,7 @@ class ContentRepository extends AbstractRepository
     {
         $queryBuilder = $this->getQueryBuilder('disabled');
         $this->addConstraintsForCtype($queryBuilder, $ctype);
-        $queryBuilder->select('uid', 'pid', 'header', 'ctype', 'list_type');
+        $queryBuilder->select('uid', 'pid', 'header', 'ctype', 'list_type', 'sys_language_uid', 't3ver_wsid');
 
         return $this->dataMapper->map(Content::class, $queryBuilder->executeQuery()->fetchAllAssociative());
     }
@@ -77,7 +77,7 @@ class ContentRepository extends AbstractRepository
     {
         $queryBuilder = $this->getQueryBuilder('deleted');
         $this->addConstraintsForCtype($queryBuilder, $ctype);
-        $queryBuilder->select('uid', 'pid', 'header', 'ctype', 'list_type');
+        $queryBuilder->select('uid', 'pid', 'header', 'ctype', 'list_type', 'sys_language_uid', 't3ver_wsid');
 
         return $this->dataMapper->map(Content::class, $queryBuilder->executeQuery()->fetchAllAssociative());
     }
@@ -99,7 +99,7 @@ class ContentRepository extends AbstractRepository
     {
         $queryBuilder = $this->getQueryBuilder('active');
         $this->addConstraintsForPlugin($queryBuilder, $plugin);
-        $queryBuilder->select('uid', 'pid', 'header', 'ctype', 'list_type');
+        $queryBuilder->select('uid', 'pid', 'header', 'ctype', 'list_type', 'sys_language_uid', 't3ver_wsid');
 
         return $this->dataMapper->map(Content::class, $queryBuilder->executeQuery()->fetchAllAssociative());
     }
@@ -121,7 +121,7 @@ class ContentRepository extends AbstractRepository
     {
         $queryBuilder = $this->getQueryBuilder('disabled');
         $this->addConstraintsForPlugin($queryBuilder, $plugin);
-        $queryBuilder->select('uid', 'pid', 'header', 'ctype', 'list_type');
+        $queryBuilder->select('uid', 'pid', 'header', 'ctype', 'list_type', 'sys_language_uid', 't3ver_wsid');
 
         return $this->dataMapper->map(Content::class, $queryBuilder->executeQuery()->fetchAllAssociative());
     }
@@ -143,7 +143,7 @@ class ContentRepository extends AbstractRepository
     {
         $queryBuilder = $this->getQueryBuilder('deleted');
         $this->addConstraintsForPlugin($queryBuilder, $plugin);
-        $queryBuilder->select('uid', 'pid', 'header', 'ctype', 'list_type');
+        $queryBuilder->select('uid', 'pid', 'header', 'ctype', 'list_type', 'sys_language_uid', 't3ver_wsid');
 
         return $this->dataMapper->map(Content::class, $queryBuilder->executeQuery()->fetchAllAssociative());
     }
