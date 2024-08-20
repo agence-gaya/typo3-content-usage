@@ -32,7 +32,7 @@ class PageRepository extends AbstractRepository
     {
         $queryBuilder = $this->getQueryBuilder('active');
         $this->addConstraintsForDoktype($queryBuilder, $doktype);
-        $queryBuilder->select('uid', 'title', 'doktype');
+        $queryBuilder->select('uid', 'title', 'doktype', 'sys_language_uid', 't3ver_wsid');
 
         return $this->dataMapper->map(Page::class, $queryBuilder->execute()->fetchAllAssociative());
     }
@@ -53,7 +53,7 @@ class PageRepository extends AbstractRepository
     {
         $queryBuilder = $this->getQueryBuilder('disabled');
         $this->addConstraintsForDoktype($queryBuilder, $doktype);
-        $queryBuilder->select('uid', 'title', 'doktype');
+        $queryBuilder->select('uid', 'title', 'doktype', 'sys_language_uid', 't3ver_wsid');
 
         return $this->dataMapper->map(Page::class, $queryBuilder->execute()->fetchAllAssociative());
     }
@@ -74,7 +74,7 @@ class PageRepository extends AbstractRepository
     {
         $queryBuilder = $this->getQueryBuilder('deleted');
         $this->addConstraintsForDoktype($queryBuilder, $doktype);
-        $queryBuilder->select('uid', 'title', 'doktype');
+        $queryBuilder->select('uid', 'title', 'doktype', 'sys_language_uid', 't3ver_wsid');
 
         return $this->dataMapper->map(Page::class, $queryBuilder->execute()->fetchAllAssociative());
     }
