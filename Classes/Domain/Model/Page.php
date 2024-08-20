@@ -12,8 +12,14 @@ class Page extends AbstractEntity
 
     protected string $doktype = '';
 
+    /**
+     * @var int
+     */
     protected int $sysLanguageUid = 0;
 
+    /**
+     * @var int
+     */
     protected int $t3verWsid = 0;
 
     public function getTitle(): string

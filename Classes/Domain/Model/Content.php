@@ -14,8 +14,14 @@ class Content extends AbstractEntity
 
     protected string $listType = '';
 
+    /**
+     * @var int
+     */
     protected int $sysLanguageUid = 0;
 
+    /**
+     * @var int
+     */
     protected int $t3verWsid = 0;
 
     public function getHeader(): string
