@@ -10,7 +10,9 @@ use GAYA\ContentUsage\Domain\Repository\PageRepository;
 use TYPO3\CMS\Backend\Template\ModuleTemplate;
 use TYPO3\CMS\Beuser\Domain\Model\ModuleData;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 
 class ReportController extends ActionController
 {
@@ -33,6 +35,11 @@ class ReportController extends ActionController
         $this->tcaConfiguration = $tcaConfiguration;
         $this->contentRepository = $contentRepository;
 
+    }
+
+    protected function initializeView(ViewInterface $view)
+    {
+        $view->assign('hasRecycler', ExtensionManagementUtility::isLoaded('recycler'));
     }
 
     public function mainAction()
