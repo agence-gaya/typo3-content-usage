@@ -18,6 +18,7 @@ use TYPO3\CMS\Backend\Template\ModuleTemplate;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Core\Http\RedirectResponse;
 use TYPO3\CMS\Core\Routing\Route;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
 #[AsController]
 class ReportController
@@ -40,6 +41,7 @@ class ReportController
     {
         $this->request = $request;
         $this->view = $this->moduleTemplateFactory->create($request);
+        $this->view->assign('hasRecycler', ExtensionManagementUtility::isLoaded('recycler'));
 
         /** @var Route $route */
         $route = $request->getAttribute('route');
