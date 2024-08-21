@@ -18,7 +18,7 @@
             <p>Note: a page with a past publication date is classified as disabled.</p>
             <f:render section="TableContent" arguments="{pages: doktype.disabledPages, status: status}" />
         </f:case>
-        <f:case value="deleted"><f:render section="TableContent" arguments="{pages: doktype.deletedPages, status: status}" /></f:case>
+        <f:case value="deleted"><f:render section="TableContent" arguments="{pages: doktype.deletedPages, status: status, hasRecycler: hasRecycler}" /></f:case>
     </f:switch>
 
     <f:render partial="BackButton"  arguments="{route: 'tools_ContentUsage', parameters: '{action: \'doktypes\'}'}" />
@@ -51,7 +51,9 @@
                                     <be:link.editRecord uid="{page.uid}" table="pages" class="btn btn-default"><core:icon identifier="actions-open" /></be:link.editRecord>
                                 </f:then>
                                 <f:else>
-                                    <f:be.link route="web_RecyclerRecycler" class="btn btn-default"><core:icon identifier="actions-file-view" /></f:be.link>
+                                    <f:if condition="{hasRecycler}">
+                                        <f:be.link route="web_RecyclerRecycler" class="btn btn-default"><core:icon identifier="actions-file-view" /></f:be.link>
+                                    </f:if>
                                 </f:else>
                             </f:if>
                         </td>

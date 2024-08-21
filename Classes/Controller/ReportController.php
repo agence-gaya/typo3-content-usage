@@ -19,6 +19,7 @@ use TYPO3\CMS\Beuser\Domain\Model\ModuleData;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Http\RedirectResponse;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3Fluid\Fluid\View\ViewInterface;
@@ -103,6 +104,7 @@ class ReportController
         $this->view->setTemplateRootPaths(['EXT:content_usage/Resources/Private/Templates']);
         $this->view->setPartialRootPaths(['EXT:content_usage/Resources/Private/Partials']);
         $this->view->setLayoutRootPaths(['EXT:content_usage/Resources/Private/Layouts']);
+        $this->view->assign('hasRecycler', ExtensionManagementUtility::isLoaded('recycler'));
     }
 
     public function mainAction(): ResponseInterface
