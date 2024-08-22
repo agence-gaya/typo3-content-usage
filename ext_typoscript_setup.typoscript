@@ -1,0 +1,16 @@
+config.tx_extbase {
+    persistence {
+        classes {
+            GAYA\ContentUsage\Domain\Model\Page {
+                mapping {
+                    tableName = pages
+                }
+            }
+            GAYA\ContentUsage\Domain\Model\Content {
+                mapping {
+                    tableName = tt_content
+                }
+            }
+        }
+    }
+}

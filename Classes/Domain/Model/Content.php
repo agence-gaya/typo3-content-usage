@@ -8,10 +8,19 @@ use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 
 class Content extends AbstractEntity
 {
+    /**
+     * @var string
+     */
     protected string $header = '';
 
+    /**
+     * @var string
+     */
     protected string $ctype = '';
 
+    /**
+     * @var string
+     */
     protected string $listType = '';
 
     /**
