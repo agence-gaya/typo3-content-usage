@@ -103,7 +103,6 @@ class Plugin
 
     /**
      * @param Content[] $activeContents
-     * @return void
      */
     public function setActiveContents(array $activeContents): void
     {
@@ -121,7 +120,6 @@ class Plugin
 
     /**
      * @param Content[] $disabledContents
-     * @return void
      */
     public function setDisabledContents(array $disabledContents): void
     {
@@ -139,7 +137,6 @@ class Plugin
 
     /**
      * @param Content[] $deletedContents
-     * @return void
      */
     public function setDeletedContents(array $deletedContents): void
     {

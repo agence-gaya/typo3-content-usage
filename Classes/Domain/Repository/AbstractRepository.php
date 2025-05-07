@@ -29,8 +29,7 @@ abstract class AbstractRepository
                 $columnMapFactory->create(
                     't3ver_wsid',
                     ['config' => ['type' => TableColumnType::PASSTHROUGH->name]],
-                    't3verWsid',
-                    Page::class
+                    't3verWsid'
                 )
             );
         }

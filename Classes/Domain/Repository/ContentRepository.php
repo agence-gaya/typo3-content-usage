@@ -26,7 +26,6 @@ class ContentRepository extends AbstractRepository
     }
 
     /**
-     * @param Ctype $ctype
      * @return Content[]
      */
     public function findActiveByCtype(Ctype $ctype): array
@@ -48,7 +47,6 @@ class ContentRepository extends AbstractRepository
     }
 
     /**
-     * @param Ctype $ctype
      * @return Content[]
      */
     public function findDisabledByCtype(Ctype $ctype): array
@@ -70,7 +68,6 @@ class ContentRepository extends AbstractRepository
     }
 
     /**
-     * @param Ctype $ctype
      * @return Content[]
      */
     public function findDeletedByCtype(Ctype $ctype): array
@@ -92,7 +89,6 @@ class ContentRepository extends AbstractRepository
     }
 
     /**
-     * @param Plugin $plugin
      * @return Content[]
      */
     public function findActiveByPlugin(Plugin $plugin): array
@@ -114,7 +110,6 @@ class ContentRepository extends AbstractRepository
     }
 
     /**
-     * @param Plugin $plugin
      * @return Content[]
      */
     public function findDisabledByPlugin(Plugin $plugin): array
@@ -136,7 +131,6 @@ class ContentRepository extends AbstractRepository
     }
 
     /**
-     * @param Plugin $plugin
      * @return Content[]
      */
     public function findDeletedByPlugin(Plugin $plugin): array

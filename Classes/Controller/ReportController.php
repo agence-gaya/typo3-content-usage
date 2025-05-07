@@ -30,9 +30,9 @@ class ReportController
     public function __construct(
         protected readonly ModuleTemplateFactory $moduleTemplateFactory,
         protected readonly UriBuilder $uriBuilder,
-        private TcaConfiguration $tcaConfiguration,
-        private PageRepository $pageRepository,
-        private ContentRepository $contentRepository
+        private readonly TcaConfiguration $tcaConfiguration,
+        private readonly PageRepository $pageRepository,
+        private readonly ContentRepository $contentRepository
     ) {
 
     }
@@ -49,19 +49,17 @@ class ReportController
         switch ($route->getOption('_identifier')) {
             case 'tools_ContentUsage.doktypes':
                 return $this->doktypesAction();
-                break;
             case 'tools_ContentUsage.ctypes':
                 return $this->ctypesAction();
-                break;
             case 'tools_ContentUsage.listTypes':
                 return $this->listTypesAction();
-                break;
             case 'tools_ContentUsage.doktypeDetail':
                 foreach ($this->tcaConfiguration->getDoktypes() as $doktype) {
                     if ($doktype->getId() === (int)$request->getQueryParams()['doktype']) {
                         return $this->doktypeDetailAction($doktype, $request->getQueryParams()['status']);
                     }
                 }
+
                 break;
             case 'tools_ContentUsage.ctypeDetail':
                 foreach ($this->tcaConfiguration->getCtypes() as $ctype) {
@@ -69,6 +67,7 @@ class ReportController
                         return $this->ctypeDetailAction($ctype, $request->getQueryParams()['status']);
                     }
                 }
+
                 break;
             case 'tools_ContentUsage.listTypeDetail':
                 foreach ($this->tcaConfiguration->getPlugins() as $plugin) {
@@ -76,6 +75,7 @@ class ReportController
                         return $this->listTypeDetailAction($plugin, $request->getQueryParams()['status']);
                     }
                 }
+
                 break;
             default:
                 return $this->mainAction();

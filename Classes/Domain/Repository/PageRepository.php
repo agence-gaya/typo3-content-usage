@@ -26,7 +26,6 @@ class PageRepository extends AbstractRepository
     }
 
     /**
-     * @param Doktype $doktype
      * @return Page[]
      */
     public function findActiveByDoktype(Doktype $doktype): array
@@ -48,7 +47,6 @@ class PageRepository extends AbstractRepository
     }
 
     /**
-     * @param Doktype $doktype
      * @return Page[]
      */
     public function findDisabledByDoktype(Doktype $doktype): array
@@ -70,7 +68,6 @@ class PageRepository extends AbstractRepository
     }
 
     /**
-     * @param Doktype $doktype
      * @return Page[]
      */
     public function findDeletedByDoktype(Doktype $doktype): array

@@ -2,11 +2,14 @@
 
 declare(strict_types=1);
 
+use GAYA\ContentUsage\Domain\Model\Page;
+use GAYA\ContentUsage\Domain\Model\Content;
+
 return [
-    \GAYA\ContentUsage\Domain\Model\Page::class => [
+    Page::class => [
         'tableName' => 'pages',
     ],
-    \GAYA\ContentUsage\Domain\Model\Content::class => [
+    Content::class => [
         'tableName' => 'tt_content',
     ],
 ];

@@ -33,6 +33,7 @@ final class LinkViewHelper extends AbstractTagBasedViewHelper
      */
     protected $tagName = 'a';
 
+    #[\Override]
     public function initializeArguments(): void
     {
         parent::initializeArguments();
@@ -55,6 +56,7 @@ final class LinkViewHelper extends AbstractTagBasedViewHelper
         $this->registerUniversalTagAttributes();
     }
 
+    #[\Override]
     public function render(): string
     {
         $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
