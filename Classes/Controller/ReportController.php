@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace GAYA\ContentUsage\Controller;
 
+use GAYA\ContentUsage\Configuration\TcaConfiguration;
 use GAYA\ContentUsage\Domain\Model\Ctype;
 use GAYA\ContentUsage\Domain\Model\Doktype;
-use GAYA\ContentUsage\Configuration\TcaConfiguration;
 use GAYA\ContentUsage\Domain\Model\Plugin;
 use GAYA\ContentUsage\Domain\Repository\ContentRepository;
 use GAYA\ContentUsage\Domain\Repository\PageRepository;
@@ -33,9 +33,7 @@ class ReportController
         private readonly TcaConfiguration $tcaConfiguration,
         private readonly PageRepository $pageRepository,
         private readonly ContentRepository $contentRepository
-    ) {
-
-    }
+    ) {}
 
     public function processRequest(ServerRequestInterface $request): ResponseInterface
     {
@@ -55,7 +53,7 @@ class ReportController
                 return $this->listTypesAction();
             case 'tools_ContentUsage.doktypeDetail':
                 foreach ($this->tcaConfiguration->getDoktypes() as $doktype) {
-                    if ($doktype->getId() === (int)$request->getQueryParams()['doktype']) {
+                    if ($doktype->getId() === (int) $request->getQueryParams()['doktype']) {
                         return $this->doktypeDetailAction($doktype, $request->getQueryParams()['status']);
                     }
                 }
@@ -82,7 +80,7 @@ class ReportController
         }
 
         // If we are here, there was a problem
-        return new RedirectResponse((string)$this->uriBuilder->buildUriFromRoute('tools_ContentUsage'));
+        return new RedirectResponse((string) $this->uriBuilder->buildUriFromRoute('tools_ContentUsage'));
     }
 
     public function mainAction(): ResponseInterface

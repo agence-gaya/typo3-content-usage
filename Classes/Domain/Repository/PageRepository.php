@@ -22,7 +22,7 @@ class PageRepository extends AbstractRepository
         $this->addConstraintsForDoktype($queryBuilder, $doktype);
         $queryBuilder->selectLiteral('count(*)');
 
-        return (int)$queryBuilder->executeQuery()->fetchNumeric()[0];
+        return (int) $queryBuilder->executeQuery()->fetchNumeric()[0];
     }
 
     /**
@@ -43,7 +43,7 @@ class PageRepository extends AbstractRepository
         $this->addConstraintsForDoktype($queryBuilder, $doktype);
         $queryBuilder->selectLiteral('count(*)');
 
-        return (int)$queryBuilder->executeQuery()->fetchNumeric()[0];
+        return (int) $queryBuilder->executeQuery()->fetchNumeric()[0];
     }
 
     /**
@@ -64,7 +64,7 @@ class PageRepository extends AbstractRepository
         $this->addConstraintsForDoktype($queryBuilder, $doktype);
         $queryBuilder->selectLiteral('count(*)');
 
-        return (int)$queryBuilder->executeQuery()->fetchNumeric()[0];
+        return (int) $queryBuilder->executeQuery()->fetchNumeric()[0];
     }
 
     /**

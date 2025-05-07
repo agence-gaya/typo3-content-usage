@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace GAYA\ContentUsage\ViewHelpers\Be;
 
+use Override;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper;
@@ -33,7 +34,7 @@ final class LinkViewHelper extends AbstractTagBasedViewHelper
      */
     protected $tagName = 'a';
 
-    #[\Override]
+    #[Override]
     public function initializeArguments(): void
     {
         parent::initializeArguments();
@@ -56,7 +57,7 @@ final class LinkViewHelper extends AbstractTagBasedViewHelper
         $this->registerUniversalTagAttributes();
     }
 
-    #[\Override]
+    #[Override]
     public function render(): string
     {
         $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
@@ -70,8 +71,8 @@ final class LinkViewHelper extends AbstractTagBasedViewHelper
             $uri .= '#' . $anchor;
         }
 
-        $this->tag->addAttribute('href', (string)$uri);
-        $this->tag->setContent((string)$this->renderChildren());
+        $this->tag->addAttribute('href', (string) $uri);
+        $this->tag->setContent((string) $this->renderChildren());
         $this->tag->forceClosingTag(true);
 
         return $this->tag->render();

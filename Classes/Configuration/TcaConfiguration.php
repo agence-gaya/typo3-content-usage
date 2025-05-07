@@ -34,7 +34,7 @@ class TcaConfiguration
             }
 
             $doktype = new Doktype();
-            $doktype->setId((int)$doktypeItem['value']);
+            $doktype->setId((int) $doktypeItem['value']);
             $doktype->setLabel($this->getTranslation($doktypeItem['label']));
             $doktype->setIcon($doktypeItem['icon'] ?? '');
 
@@ -94,8 +94,9 @@ class TcaConfiguration
     {
         if (str_starts_with($key, 'LLL:')) {
             return LocalizationUtility::translate($key);
-        } else {
-            return $key;
         }
+
+        return $key;
+
     }
 }
