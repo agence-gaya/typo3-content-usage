@@ -74,6 +74,10 @@ class TcaConfiguration
     {
         $plugins = [];
 
+        if (empty($this->tca['tt_content']['columns']['list_type']['config']['items'])) {
+            return $plugins;
+        }
+
         foreach ($this->tca['tt_content']['columns']['list_type']['config']['items'] as $pluginItem) {
             if ($pluginItem['value'] === '') {
                 continue;
