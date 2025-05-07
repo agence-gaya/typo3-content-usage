@@ -47,7 +47,7 @@
                         <td>{content.header}</td>
                         <td>{content.sysLanguageUid}</td>
                         <td>{content.t3verWsid}</td>
-                        <td>
+                        <td class="btn-group">
                             <f:if condition="{status} != deleted">
                                 <f:then>
                                     <cu:be.link route="web_layout" parameters="{id: content.pid}" anchor="element-tt_content-{content.uid}" class="btn btn-default"><core:icon identifier="actions-file-view" /></cu:be.link>

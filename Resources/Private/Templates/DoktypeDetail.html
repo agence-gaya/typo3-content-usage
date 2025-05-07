@@ -44,7 +44,7 @@
                         <td>{page.title}</td>
                         <td>{page.sysLanguageUid}</td>
                         <td>{page.t3verWsid}</td>
-                        <td>
+                        <td class="btn-group">
                             <f:if condition="{status} != deleted">
                                 <f:then>
                                     <f:be.link route="web_layout" parameters="{id: page.uid}" class="btn btn-default"><core:icon identifier="actions-file-view" /></f:be.link>
