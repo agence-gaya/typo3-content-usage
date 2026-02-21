@@ -6,10 +6,10 @@ use GAYA\ContentUsage\Controller\ReportController;
 
 return [
     'tools_ContentUsage' => [
-        'parent' => 'tools',
+        'parent' => 'system',
         'access' => 'user,group',
         'iconIdentifier' => 'module-content-usage',
-        'path' => '/module/tools/ContentUsage',
+        'path' => '/module/system/ContentUsage',
         'labels' => 'LLL:EXT:content_usage/Resources/Private/Language/backend.xlf',
         'extensionName' => 'ContentUsage',
         'routes' => [
