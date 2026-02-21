@@ -25,16 +25,10 @@ return [
             'ctypes' => [
                 'target' => ReportController::class . '::processRequest',
             ],
-            'listTypes' => [
-                'target' => ReportController::class . '::processRequest',
-            ],
             'doktypeDetail' => [
                 'target' => ReportController::class . '::processRequest',
             ],
             'ctypeDetail' => [
-                'target' => ReportController::class . '::processRequest',
-            ],
-            'listTypeDetail' => [
                 'target' => ReportController::class . '::processRequest',
             ],
         ],

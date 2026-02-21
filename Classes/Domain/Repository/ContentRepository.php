@@ -6,7 +6,6 @@ namespace GAYA\ContentUsage\Domain\Repository;
 
 use GAYA\ContentUsage\Domain\Model\Content;
 use GAYA\ContentUsage\Domain\Model\Ctype;
-use GAYA\ContentUsage\Domain\Model\Plugin;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 
 class ContentRepository extends AbstractRepository
@@ -32,7 +31,7 @@ class ContentRepository extends AbstractRepository
     {
         $queryBuilder = $this->getQueryBuilder('active');
         $this->addConstraintsForCtype($queryBuilder, $ctype);
-        $queryBuilder->select('uid', 'pid', 'header', 'ctype', 'list_type', 'sys_language_uid', 't3ver_wsid');
+        $queryBuilder->select('uid', 'pid', 'header', 'ctype', 'sys_language_uid', 't3ver_wsid');
 
         return $this->dataMapper->map(Content::class, $queryBuilder->executeQuery()->fetchAllAssociative());
     }
@@ -53,7 +52,7 @@ class ContentRepository extends AbstractRepository
     {
         $queryBuilder = $this->getQueryBuilder('disabled');
         $this->addConstraintsForCtype($queryBuilder, $ctype);
-        $queryBuilder->select('uid', 'pid', 'header', 'ctype', 'list_type', 'sys_language_uid', 't3ver_wsid');
+        $queryBuilder->select('uid', 'pid', 'header', 'ctype', 'sys_language_uid', 't3ver_wsid');
 
         return $this->dataMapper->map(Content::class, $queryBuilder->executeQuery()->fetchAllAssociative());
     }
@@ -74,70 +73,7 @@ class ContentRepository extends AbstractRepository
     {
         $queryBuilder = $this->getQueryBuilder('deleted');
         $this->addConstraintsForCtype($queryBuilder, $ctype);
-        $queryBuilder->select('uid', 'pid', 'header', 'ctype', 'list_type', 'sys_language_uid', 't3ver_wsid');
-
-        return $this->dataMapper->map(Content::class, $queryBuilder->executeQuery()->fetchAllAssociative());
-    }
-
-    public function countActiveByPlugin(Plugin $plugin): int
-    {
-        $queryBuilder = $this->getQueryBuilder('active');
-        $this->addConstraintsForPlugin($queryBuilder, $plugin);
-        $queryBuilder->selectLiteral('count(*)');
-
-        return (int) $queryBuilder->executeQuery()->fetchNumeric()[0];
-    }
-
-    /**
-     * @return Content[]
-     */
-    public function findActiveByPlugin(Plugin $plugin): array
-    {
-        $queryBuilder = $this->getQueryBuilder('active');
-        $this->addConstraintsForPlugin($queryBuilder, $plugin);
-        $queryBuilder->select('uid', 'pid', 'header', 'ctype', 'list_type', 'sys_language_uid', 't3ver_wsid');
-
-        return $this->dataMapper->map(Content::class, $queryBuilder->executeQuery()->fetchAllAssociative());
-    }
-
-    public function countDisabledByPlugin(Plugin $plugin): int
-    {
-        $queryBuilder = $this->getQueryBuilder('disabled');
-        $this->addConstraintsForPlugin($queryBuilder, $plugin);
-        $queryBuilder->selectLiteral('count(*)');
-
-        return (int) $queryBuilder->executeQuery()->fetchNumeric()[0];
-    }
-
-    /**
-     * @return Content[]
-     */
-    public function findDisabledByPlugin(Plugin $plugin): array
-    {
-        $queryBuilder = $this->getQueryBuilder('disabled');
-        $this->addConstraintsForPlugin($queryBuilder, $plugin);
-        $queryBuilder->select('uid', 'pid', 'header', 'ctype', 'list_type', 'sys_language_uid', 't3ver_wsid');
-
-        return $this->dataMapper->map(Content::class, $queryBuilder->executeQuery()->fetchAllAssociative());
-    }
-
-    public function countDeletedByPlugin(Plugin $plugin): int
-    {
-        $queryBuilder = $this->getQueryBuilder('deleted');
-        $this->addConstraintsForPlugin($queryBuilder, $plugin);
-        $queryBuilder->selectLiteral('count(*)');
-
-        return (int) $queryBuilder->executeQuery()->fetchNumeric()[0];
-    }
-
-    /**
-     * @return Content[]
-     */
-    public function findDeletedByPlugin(Plugin $plugin): array
-    {
-        $queryBuilder = $this->getQueryBuilder('deleted');
-        $this->addConstraintsForPlugin($queryBuilder, $plugin);
-        $queryBuilder->select('uid', 'pid', 'header', 'ctype', 'list_type', 'sys_language_uid', 't3ver_wsid');
+        $queryBuilder->select('uid', 'pid', 'header', 'ctype', 'sys_language_uid', 't3ver_wsid');
 
         return $this->dataMapper->map(Content::class, $queryBuilder->executeQuery()->fetchAllAssociative());
     }
@@ -148,22 +84,6 @@ class ContentRepository extends AbstractRepository
             $queryBuilder->expr()->eq(
                 'Ctype',
                 $queryBuilder->createNamedParameter($ctype->getId())
-            )
-        );
-    }
-
-    private function addConstraintsForPlugin(QueryBuilder $queryBuilder, Plugin $plugin): void
-    {
-        $queryBuilder->andWhere(
-            $queryBuilder->expr()->and(
-                $queryBuilder->expr()->eq(
-                    'Ctype',
-                    $queryBuilder->createNamedParameter('list')
-                ),
-                $queryBuilder->expr()->eq(
-                    'list_type',
-                    $queryBuilder->createNamedParameter($plugin->getId())
-                )
             )
         );
     }

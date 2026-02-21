@@ -12,8 +12,6 @@ class Content extends AbstractEntity
 
     protected string $ctype;
 
-    protected string $listType;
-
     protected int $sysLanguageUid = 0;
 
     protected int $t3verWsid = 0;
@@ -36,16 +34,6 @@ class Content extends AbstractEntity
     public function setCtype(string $ctype): void
     {
         $this->ctype = $ctype;
-    }
-
-    public function getListType(): string
-    {
-        return $this->listType;
-    }
-
-    public function setListType(string $listType): void
-    {
-        $this->listType = $listType;
     }
 
     public function getSysLanguageUid(): int

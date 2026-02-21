@@ -7,7 +7,6 @@ namespace GAYA\ContentUsage\Controller;
 use GAYA\ContentUsage\Configuration\TcaConfiguration;
 use GAYA\ContentUsage\Domain\Model\Ctype;
 use GAYA\ContentUsage\Domain\Model\Doktype;
-use GAYA\ContentUsage\Domain\Model\Plugin;
 use GAYA\ContentUsage\Domain\Repository\ContentRepository;
 use GAYA\ContentUsage\Domain\Repository\PageRepository;
 use Psr\Http\Message\ResponseInterface;
@@ -49,8 +48,6 @@ class ReportController
                 return $this->doktypesAction();
             case 'tools_ContentUsage.ctypes':
                 return $this->ctypesAction();
-            case 'tools_ContentUsage.listTypes':
-                return $this->listTypesAction();
             case 'tools_ContentUsage.doktypeDetail':
                 foreach ($this->tcaConfiguration->getDoktypes() as $doktype) {
                     if ($doktype->getId() === (int) $request->getQueryParams()['doktype']) {
@@ -63,14 +60,6 @@ class ReportController
                 foreach ($this->tcaConfiguration->getCtypes() as $ctype) {
                     if ($ctype->getId() === $request->getQueryParams()['ctype']) {
                         return $this->ctypeDetailAction($ctype, $request->getQueryParams()['status']);
-                    }
-                }
-
-                break;
-            case 'tools_ContentUsage.listTypeDetail':
-                foreach ($this->tcaConfiguration->getPlugins() as $plugin) {
-                    if ($plugin->getId() === $request->getQueryParams()['listType']) {
-                        return $this->listTypeDetailAction($plugin, $request->getQueryParams()['status']);
                     }
                 }
 
@@ -116,20 +105,6 @@ class ReportController
         return $this->view->renderResponse('Ctypes');
     }
 
-    public function listTypesAction(): ResponseInterface
-    {
-        $plugins = $this->tcaConfiguration->getPlugins();
-        foreach ($plugins as $plugin) {
-            $plugin->setTotalActiveContents($this->contentRepository->countActiveByPlugin($plugin));
-            $plugin->setTotalDisabledContents($this->contentRepository->countDisabledByPlugin($plugin));
-            $plugin->setTotalDeletedContents($this->contentRepository->countDeletedByPlugin($plugin));
-        }
-
-        $this->view->assign('plugins', $plugins);
-
-        return $this->view->renderResponse('ListTypes');
-    }
-
     public function doktypeDetailAction(Doktype $doktype, string $status): ResponseInterface
     {
         match ($status) {
@@ -156,19 +131,5 @@ class ReportController
         $this->view->assign('status', $status);
 
         return $this->view->renderResponse('CtypeDetail');
-    }
-
-    public function listTypeDetailAction(Plugin $plugin, string $status): ResponseInterface
-    {
-        match ($status) {
-            'active' => $plugin->setActiveContents($this->contentRepository->findActiveByPlugin($plugin)),
-            'disabled' => $plugin->setDisabledContents($this->contentRepository->findDisabledByPlugin($plugin)),
-            'deleted' => $plugin->setDeletedContents($this->contentRepository->findDeletedByPlugin($plugin)),
-        };
-
-        $this->view->assign('plugin', $plugin);
-        $this->view->assign('status', $status);
-
-        return $this->view->renderResponse('ListTypeDetail');
     }
 }

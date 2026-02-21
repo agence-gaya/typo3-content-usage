@@ -4,7 +4,6 @@ This TYPO3 extension analyse database to generate a report of content usage:
 
 - Doktypes
 - Ctypes
-- Plugins (list_Type)
 
 ## Installation
 
@@ -19,10 +18,6 @@ List all doktypes declared on the TYPO3 instance and list all pages (actives, di
 ### CType
 
 List all ctypes declared on the TYPO3 instance and list all contents (actives, disabled, deleted) which are using these CTypes.
-
-### Plugins
-
-List all plugins (list_type) declared on the TYPO3 instance and list all contents (actives, disabled, deleted) which are using these plugins.
 
 ## Why
 

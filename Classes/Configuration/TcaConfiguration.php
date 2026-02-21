@@ -6,7 +6,6 @@ namespace GAYA\ContentUsage\Configuration;
 
 use GAYA\ContentUsage\Domain\Model\Ctype;
 use GAYA\ContentUsage\Domain\Model\Doktype;
-use GAYA\ContentUsage\Domain\Model\Plugin;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 class TcaConfiguration
@@ -65,33 +64,6 @@ class TcaConfiguration
         }
 
         return $ctypes;
-    }
-
-    /**
-     * @return Plugin[]
-     */
-    public function getPlugins(): array
-    {
-        $plugins = [];
-
-        if (empty($this->tca['tt_content']['columns']['list_type']['config']['items'])) {
-            return $plugins;
-        }
-
-        foreach ($this->tca['tt_content']['columns']['list_type']['config']['items'] as $pluginItem) {
-            if ($pluginItem['value'] === '') {
-                continue;
-            }
-
-            $plugin = new Plugin();
-            $plugin->setId($pluginItem['value']);
-            $plugin->setLabel($this->getTranslation($pluginItem['label']));
-            $plugin->setIcon($pluginItem['icon'] ?? '');
-
-            $plugins[] = $plugin;
-        }
-
-        return $plugins;
     }
 
     private function getTranslation(string $key): string
