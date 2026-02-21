@@ -12,7 +12,6 @@ namespace GAYA\ContentUsage\ViewHelpers\Be;
 
 use Override;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper;
 
 /**
@@ -34,6 +33,14 @@ final class LinkViewHelper extends AbstractTagBasedViewHelper
      */
     protected $tagName = 'a';
 
+    /**
+     * Constructor.
+     */
+    public function __construct(private readonly UriBuilder $uriBuilder)
+    {
+        parent::__construct();
+    }
+
     #[Override]
     public function initializeArguments(): void
     {
@@ -54,13 +61,12 @@ final class LinkViewHelper extends AbstractTagBasedViewHelper
             'Specifies the relationship between the linked document and the current document'
         );
         $this->registerTagAttribute('target', 'string', 'Specifies where to open the linked document');
-        $this->registerUniversalTagAttributes();
     }
 
     #[Override]
     public function render(): string
     {
-        $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
+        $uriBuilder = $this->uriBuilder;
         $route = $this->arguments['route'];
         $parameters = $this->arguments['parameters'];
         $referenceType = $this->arguments['referenceType'];

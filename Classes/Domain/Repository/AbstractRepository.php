@@ -63,7 +63,7 @@ abstract class AbstractRepository
         return $queryBuilder;
     }
 
-    private function getActiveConstraints(QueryBuilder $queryBuilder): CompositeExpression|string
+    private function getActiveConstraints(QueryBuilder $queryBuilder): CompositeExpression
     {
         return $queryBuilder->expr()->and(
             $queryBuilder->expr()->eq('deleted', 0),
@@ -75,7 +75,7 @@ abstract class AbstractRepository
         );
     }
 
-    private function getDisabledConstraints(QueryBuilder $queryBuilder): CompositeExpression|string
+    private function getDisabledConstraints(QueryBuilder $queryBuilder): CompositeExpression
     {
         return $queryBuilder->expr()->and(
             $queryBuilder->expr()->eq('deleted', 0),
@@ -89,7 +89,7 @@ abstract class AbstractRepository
         );
     }
 
-    private function getDeletedConstraints(QueryBuilder $queryBuilder): CompositeExpression|string
+    private function getDeletedConstraints(QueryBuilder $queryBuilder): string
     {
         return $queryBuilder->expr()->eq('deleted', 1);
     }
