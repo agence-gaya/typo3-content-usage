@@ -4,46 +4,17 @@ declare(strict_types=1);
 
 namespace GAYA\ContentUsage\Domain\Repository;
 
-use GAYA\ContentUsage\Domain\Model\Content;
-use GAYA\ContentUsage\Domain\Model\Page;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Expression\CompositeExpression;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
-use TYPO3\CMS\Core\DataHandling\TableColumnType;
-use TYPO3\CMS\Core\Schema\FieldTypeFactory;
-use TYPO3\CMS\Core\Schema\RelationMapBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Persistence\Generic\Mapper\ColumnMapFactory;
 use TYPO3\CMS\Extbase\Persistence\Generic\Mapper\DataMapper;
 
 abstract class AbstractRepository
 {
     public function __construct(
         protected DataMapper $dataMapper,
-        ColumnMapFactory $columnMapFactory,
-        FieldTypeFactory $fieldTypeFactory,
-        RelationMapBuilder $relationMapBuilder,
-    ) {
-        // t3ver_wsid field is not configured in TCA, so the dataMapper won't map it because it's a "non persistable property" for him
-        // To fix that, we manually add the field in the dataMapper
-        $relationMap = $relationMapBuilder->buildFromStructure($GLOBALS['TCA']);
-        foreach ([Page::class, Content::class] as $class) {
-            $dataMap = $this->dataMapper->getDataMap($class);
-            $dataMap->addColumnMap(
-                't3verWsid',
-                $columnMapFactory->create(
-                    $fieldTypeFactory->createFieldType(
-                        't3ver_wsid',
-                        ['config' => ['type' => TableColumnType::PASSTHROUGH->value]],
-                        $dataMap->getTableName(),
-                        $relationMap
-                    ),
-                    't3verWsid',
-                    $class
-                )
-            );
-        }
-    }
+    ) {}
 
     abstract protected function getTableName(): string;
 
