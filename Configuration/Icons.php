@@ -2,14 +2,11 @@
 
 declare(strict_types=1);
 
-use TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider;
+use TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider;
 
 return [
     'module-content-usage' => [
-        'provider' => BitmapIconProvider::class,
-        // The source bitmap file
-        'source' => 'EXT:content_usage/Resources/Public/Icons/Extension.png',
-        // All icon providers provide the possibility to register an icon that spins
-        'spinning' => false,
+        'provider' => SvgIconProvider::class,
+        'source' => 'EXT:content_usage/Resources/Public/Icons/Extension.svg',
     ],
 ];
