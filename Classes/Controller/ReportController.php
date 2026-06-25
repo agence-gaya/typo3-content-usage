@@ -44,11 +44,11 @@ class ReportController
         $route = $request->getAttribute('route');
 
         switch ($route->getOption('_identifier')) {
-            case 'tools_ContentUsage.doktypes':
+            case 'system_contentusage.doktypes':
                 return $this->doktypesAction();
-            case 'tools_ContentUsage.ctypes':
+            case 'system_contentusage.ctypes':
                 return $this->ctypesAction();
-            case 'tools_ContentUsage.doktypeDetail':
+            case 'system_contentusage.doktypeDetail':
                 foreach ($this->tcaConfiguration->getDoktypes() as $doktype) {
                     if ($doktype->getId() === (int) $request->getQueryParams()['doktype']) {
                         return $this->doktypeDetailAction($doktype, $request->getQueryParams()['status']);
@@ -56,7 +56,7 @@ class ReportController
                 }
 
                 break;
-            case 'tools_ContentUsage.ctypeDetail':
+            case 'system_contentusage.ctypeDetail':
                 foreach ($this->tcaConfiguration->getCtypes() as $ctype) {
                     if ($ctype->getId() === $request->getQueryParams()['ctype']) {
                         return $this->ctypeDetailAction($ctype, $request->getQueryParams()['status']);
@@ -69,7 +69,7 @@ class ReportController
         }
 
         // If we are here, there was a problem
-        return new RedirectResponse((string) $this->uriBuilder->buildUriFromRoute('tools_ContentUsage'));
+        return new RedirectResponse((string) $this->uriBuilder->buildUriFromRoute('system_contentusage'));
     }
 
     public function mainAction(): ResponseInterface

@@ -5,12 +5,12 @@ declare(strict_types=1);
 use GAYA\ContentUsage\Controller\ReportController;
 
 return [
-    'tools_ContentUsage' => [
+    'system_contentusage' => [
         'parent' => 'system',
-        'access' => 'user,group',
+        'access' => 'user',
         'iconIdentifier' => 'module-content-usage',
-        'path' => '/module/system/ContentUsage',
-        'labels' => 'LLL:EXT:content_usage/Resources/Private/Language/backend.xlf',
+        'path' => '/module/system/contentusage',
+        'labels' => 'content_usage.modules.main',
         'extensionName' => 'ContentUsage',
         'routes' => [
             '_default' => [
