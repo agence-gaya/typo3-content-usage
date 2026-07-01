@@ -11,6 +11,29 @@
 
     <f:render partial="BackButton" arguments="{route: 'tools_ContentUsage.main'}" />
 
+    <div class="callout callout-warning">
+        <div class="media">
+            <div class="media-left">
+                <span class="icon-emphasized">
+                    <span class="icon icon-size-small icon-state-default">
+                        <span class="icon-markup">
+                            <core:icon identifier="actions-exclamation-triangle" size="small" />
+                        </span>
+                    </span>
+                </span>
+            </div>
+            <div class="media-body">
+                <div class="callout-title">Important Notice!</div>
+                <div class="callout-body">
+                    <p>
+                        Since TYPO3 13.4, registering a plugin as ExtensionUtility::PLUGIN_TYPE_PLUGIN is deprecated and will be removed in TYPO3 14.0 :<br>
+                        <a href="https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/13.4/Deprecation-105076-PluginContentElementAndPluginSubTypes.html" target="_blank">Deprecation: #105076 - Plugin content element and plugin sub types</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="table-fit">
         <table class="table table-striped table-hover">
             <thead>
