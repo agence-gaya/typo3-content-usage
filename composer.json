@@ -3,7 +3,7 @@
   "description": "Content usage analysis",
   "type": "typo3-cms-extension",
   "license": "GPL-2.0+",
-  "version": "12.0.1",
+  "version": "12.0.2",
   "keywords": [
     "typo3",
     "content",
