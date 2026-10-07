@@ -8,6 +8,7 @@ use GAYA\ContentUsage\Domain\Model\Ctype;
 use GAYA\ContentUsage\Domain\Model\Doktype;
 use GAYA\ContentUsage\Domain\Repository\ContentRepository;
 use GAYA\ContentUsage\Domain\Repository\PageRepository;
+use GAYA\ContentUsage\Filter\RecordFilters;
 use PHPUnit\Framework\Attributes\DataProvider;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Context\DateTimeAspect;
@@ -118,4 +119,42 @@ final class UsageRepositoryTest extends FunctionalTestCase
             self::assertSame([], $repository->{'find' . $status . 'By' . $methodSuffix}($type));
         }
     }
+
+    #[DataProvider('recordKinds')]
+    public function testLanguageAndWorkspaceFiltersApplyToCountsAndLists(string $table, string $typeField, string|int $typeId, string|int $otherTypeId, string $repositoryClass, string $typeClass, string $methodSuffix): void
+    {
+        $repository = new $repositoryClass($this->get(DataMapper::class), $this->get(Context::class));
+        $type = new $typeClass();
+        $type->setId($typeId);
+
+        $connection = $this->get(ConnectionPool::class)->getConnectionForTable($table);
+        foreach ([-1, 0, 1] as $language) {
+            foreach ([0, 2] as $workspace) {
+                foreach (['Active', 'Disabled', 'Deleted'] as $status) {
+                    $connection->insert($table, [$typeField => $typeId, 'sys_language_uid' => $language, 't3ver_wsid' => $workspace, 'hidden' => (int)($status === 'Disabled'), 'deleted' => (int)($status === 'Deleted')]);
+                }
+            }
+        }
+
+        foreach ([[null, null, 6], [0, null, 2], [null, 0, 3], [0, 0, 1], [1, 2, 1], [-1, 2, 1], [99, 0, 0]] as [$language, $workspace, $expected]) {
+            $filters = new RecordFilters($language, $workspace);
+            $grouped = $repository->countByTypeAndStatus($filters);
+            foreach (['Active', 'Disabled', 'Deleted'] as $status) {
+                self::assertSame($expected, $repository->{'count' . $status . 'By' . $methodSuffix}($type, $filters));
+                self::assertSame($expected, $grouped[$typeId][strtolower($status)] ?? 0);
+                $records = $repository->{'find' . $status . 'By' . $methodSuffix}($type, 1, 0, $filters);
+                self::assertCount(min(1, $expected), $records);
+                foreach ($records as $record) {
+                    if ($language !== null) {
+                        self::assertSame($language, $record->getSysLanguageUid());
+                    }
+
+                    if ($workspace !== null) {
+                        self::assertSame($workspace, $record->getT3verWsid());
+                    }
+                }
+            }
+        }
+    }
+
 }

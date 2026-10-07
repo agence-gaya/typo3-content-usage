@@ -14,6 +14,11 @@ return [
         'extensionName' => 'ContentUsage',
         'moduleData' => [
             'ctypesPageSize' => 100,
+            'ctypesFilters' => ['language' => 'all', 'workspace' => 'all'],
+            'doktypesFilters' => ['language' => 'all', 'workspace' => 'all'],
+            'ctypeDetailFilters' => ['language' => 'all', 'workspace' => 'all'],
+            'doktypeDetailFilters' => ['language' => 'all', 'workspace' => 'all'],
+
             'doktypesPageSize' => 100,
             'ctypeDetailPageSize' => 100,
             'doktypeDetailPageSize' => 100,

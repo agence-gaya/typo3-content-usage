@@ -3,7 +3,7 @@
       data-namespace-typo3-fluid="true">
 
 <p>
-    <f:be.link route="{route}" class="btn btn-default">
+    <f:be.link route="{route}" parameters="{f:if(condition: parameters, then: parameters, else: {})}" class="btn btn-default">
         <core:icon identifier="actions-arrow-down-left" />
     </f:be.link>
 </p>

@@ -13,6 +13,8 @@
 
     <f:render partial="BackButton" arguments="{route: 'system_contentusage.main'}" />
 
+    <f:render partial="Filters" arguments="{route: paginationRoute, parameters: filterRouteParameters, filters: filterParameters, languageOptions: languageOptions, workspaceOptions: workspaceOptions}" />
+
     <f:render partial="Pagination/Size" arguments="{pagination: pagination, route: paginationRoute, parameters: paginationParameters}" />
     <f:render partial="Pagination/Navigation" arguments="{pagination: pagination, route: paginationRoute, parameters: paginationParameters}" />
 
@@ -40,19 +42,19 @@
                         <td>{ctype.label}</td>
                         <td style="text-align:right;">
                             {ctype.totalActiveContents}
-                            <f:be.link route="system_contentusage.ctypeDetail" parameters="{ctype: ctype.id, status: 'active'}" class="btn btn-default">
+                            <f:be.link route="system_contentusage.ctypeDetail" parameters="{ctype: ctype.id, status: 'active', language: filterParameters.language, workspace: filterParameters.workspace}" class="btn btn-default">
                                 <core:icon identifier="actions-file-view" />
                             </f:be.link>
                         </td>
                         <td style="text-align:right;">
                             {ctype.totalDisabledContents}
-                            <f:be.link route="system_contentusage.ctypeDetail" parameters="{ctype: ctype.id, status: 'disabled'}" class="btn btn-default">
+                            <f:be.link route="system_contentusage.ctypeDetail" parameters="{ctype: ctype.id, status: 'disabled', language: filterParameters.language, workspace: filterParameters.workspace}" class="btn btn-default">
                                 <core:icon identifier="actions-file-view" />
                             </f:be.link>
                         </td>
                         <td style="text-align:right;">
                             {ctype.totalDeletedContents}
-                            <f:be.link route="system_contentusage.ctypeDetail" parameters="{ctype: ctype.id, status: 'deleted'}" class="btn btn-default">
+                            <f:be.link route="system_contentusage.ctypeDetail" parameters="{ctype: ctype.id, status: 'deleted', language: filterParameters.language, workspace: filterParameters.workspace}" class="btn btn-default">
                                 <core:icon identifier="actions-file-view" />
                             </f:be.link>
                         </td>

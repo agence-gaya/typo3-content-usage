@@ -6,6 +6,7 @@ namespace GAYA\ContentUsage\Domain\Repository;
 
 use GAYA\ContentUsage\Domain\Model\Content;
 use GAYA\ContentUsage\Domain\Model\Ctype;
+use GAYA\ContentUsage\Filter\RecordFilters;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 
 class ContentRepository extends AbstractRepository
@@ -15,9 +16,9 @@ class ContentRepository extends AbstractRepository
         return 'tt_content';
     }
 
-    public function countActiveByCtype(Ctype $ctype): int
+    public function countActiveByCtype(Ctype $ctype, ?RecordFilters $filters = null): int
     {
-        $queryBuilder = $this->getQueryBuilder('active');
+        $queryBuilder = $this->getQueryBuilder('active', $filters);
         $this->addConstraintsForCtype($queryBuilder, $ctype);
         $queryBuilder->selectLiteral('count(*)');
 
@@ -27,9 +28,9 @@ class ContentRepository extends AbstractRepository
     /**
      * @return Content[]
      */
-    public function findActiveByCtype(Ctype $ctype, ?int $limit = null, int $offset = 0): array
+    public function findActiveByCtype(Ctype $ctype, ?int $limit = null, int $offset = 0, ?RecordFilters $filters = null): array
     {
-        $queryBuilder = $this->getQueryBuilder('active');
+        $queryBuilder = $this->getQueryBuilder('active', $filters);
         $this->addConstraintsForCtype($queryBuilder, $ctype);
         $queryBuilder->select('uid', 'pid', 'header', 'CType', 'sys_language_uid', 't3ver_wsid');
 
@@ -38,9 +39,9 @@ class ContentRepository extends AbstractRepository
         return $this->dataMapper->map(Content::class, $queryBuilder->executeQuery()->fetchAllAssociative());
     }
 
-    public function countDisabledByCtype(Ctype $ctype): int
+    public function countDisabledByCtype(Ctype $ctype, ?RecordFilters $filters = null): int
     {
-        $queryBuilder = $this->getQueryBuilder('disabled');
+        $queryBuilder = $this->getQueryBuilder('disabled', $filters);
         $this->addConstraintsForCtype($queryBuilder, $ctype);
         $queryBuilder->selectLiteral('count(*)');
 
@@ -50,9 +51,9 @@ class ContentRepository extends AbstractRepository
     /**
      * @return Content[]
      */
-    public function findDisabledByCtype(Ctype $ctype, ?int $limit = null, int $offset = 0): array
+    public function findDisabledByCtype(Ctype $ctype, ?int $limit = null, int $offset = 0, ?RecordFilters $filters = null): array
     {
-        $queryBuilder = $this->getQueryBuilder('disabled');
+        $queryBuilder = $this->getQueryBuilder('disabled', $filters);
         $this->addConstraintsForCtype($queryBuilder, $ctype);
         $queryBuilder->select('uid', 'pid', 'header', 'CType', 'sys_language_uid', 't3ver_wsid');
 
@@ -61,9 +62,9 @@ class ContentRepository extends AbstractRepository
         return $this->dataMapper->map(Content::class, $queryBuilder->executeQuery()->fetchAllAssociative());
     }
 
-    public function countDeletedByCtype(Ctype $ctype): int
+    public function countDeletedByCtype(Ctype $ctype, ?RecordFilters $filters = null): int
     {
-        $queryBuilder = $this->getQueryBuilder('deleted');
+        $queryBuilder = $this->getQueryBuilder('deleted', $filters);
         $this->addConstraintsForCtype($queryBuilder, $ctype);
         $queryBuilder->selectLiteral('count(*)');
 
@@ -73,9 +74,9 @@ class ContentRepository extends AbstractRepository
     /**
      * @return Content[]
      */
-    public function findDeletedByCtype(Ctype $ctype, ?int $limit = null, int $offset = 0): array
+    public function findDeletedByCtype(Ctype $ctype, ?int $limit = null, int $offset = 0, ?RecordFilters $filters = null): array
     {
-        $queryBuilder = $this->getQueryBuilder('deleted');
+        $queryBuilder = $this->getQueryBuilder('deleted', $filters);
         $this->addConstraintsForCtype($queryBuilder, $ctype);
         $queryBuilder->select('uid', 'pid', 'header', 'CType', 'sys_language_uid', 't3ver_wsid');
 
@@ -84,9 +85,9 @@ class ContentRepository extends AbstractRepository
         return $this->dataMapper->map(Content::class, $queryBuilder->executeQuery()->fetchAllAssociative());
     }
 
-    public function countByTypeAndStatus(): array
+    public function countByTypeAndStatus(?RecordFilters $filters = null): array
     {
-        return $this->getCountsByTypeAndStatus('CType');
+        return $this->getCountsByTypeAndStatus('CType', $filters);
     }
 
     private function addConstraintsForCtype(QueryBuilder $queryBuilder, Ctype $ctype): void

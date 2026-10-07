@@ -8,6 +8,8 @@ use GAYA\ContentUsage\Configuration\TcaConfiguration;
 use GAYA\ContentUsage\Controller\ReportController;
 use GAYA\ContentUsage\Domain\Repository\ContentRepository;
 use GAYA\ContentUsage\Domain\Repository\PageRepository;
+use GAYA\ContentUsage\Filter\FilterOptions;
+use GAYA\ContentUsage\Filter\FilterPreferences;
 use GAYA\ContentUsage\Pagination\PageSizePreference;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -38,6 +40,8 @@ final class ReportControllerTest extends TestCase
             self::createStub(PageRepository::class),
             self::createStub(ContentRepository::class),
             new PageSizePreference(),
+            (new \ReflectionClass(FilterOptions::class))->newInstanceWithoutConstructor(),
+            new FilterPreferences(),
         );
         $request = (new ServerRequest())->withQueryParams($parameters)->withAttribute(
             'route',

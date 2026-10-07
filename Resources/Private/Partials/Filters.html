@@ -1,0 +1,28 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<f:asset.module identifier="@typo3/backend/global-event-handler.js" />
+<form action="{f:be.uri(route: route, parameters: parameters)}" method="post" class="row g-3 mb-3">
+    <div class="col-auto">
+        <label for="language-filter" class="form-label">Language</label>
+        <select id="language-filter" name="language" class="form-select" data-global-event="change" data-action-submit="$form">
+            <f:for each="{languageOptions}" key="value" as="label">
+                <f:if condition="{filters.language} == {value}">
+                    <f:then><option value="{value}" selected="selected">{label}</option></f:then>
+                    <f:else><option value="{value}">{label}</option></f:else>
+                </f:if>
+            </f:for>
+        </select>
+    </div>
+    <div class="col-auto">
+        <label for="workspace-filter" class="form-label">Workspace</label>
+        <select id="workspace-filter" name="workspace" class="form-select" data-global-event="change" data-action-submit="$form">
+            <f:for each="{workspaceOptions}" key="value" as="label">
+                <f:if condition="{filters.workspace} == {value}">
+                    <f:then><option value="{value}" selected="selected">{label}</option></f:then>
+                    <f:else><option value="{value}">{label}</option></f:else>
+                </f:if>
+            </f:for>
+        </select>
+    </div>
+    <noscript><button type="submit" class="btn btn-default">Apply filters</button></noscript>
+</form>
+</html>

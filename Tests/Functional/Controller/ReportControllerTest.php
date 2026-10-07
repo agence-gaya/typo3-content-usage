@@ -8,6 +8,8 @@ use GAYA\ContentUsage\Configuration\TcaConfiguration;
 use GAYA\ContentUsage\Controller\ReportController;
 use GAYA\ContentUsage\Domain\Repository\ContentRepository;
 use GAYA\ContentUsage\Domain\Repository\PageRepository;
+use GAYA\ContentUsage\Filter\FilterOptions;
+use GAYA\ContentUsage\Filter\FilterPreferences;
 use GAYA\ContentUsage\Pagination\PageSizePreference;
 use PHPUnit\Framework\Attributes\DataProvider;
 use TYPO3\CMS\Backend\Module\ModuleData;
@@ -163,6 +165,8 @@ final class ReportControllerTest extends FunctionalTestCase
                 $this->get(PageRepository::class),
                 $this->get(ContentRepository::class),
                 new PageSizePreference(),
+                $this->get(FilterOptions::class),
+                new FilterPreferences(),
             );
             $html = (string)$controller->processRequest($this->request($screen, ['page' => 2]))->getBody();
             self::assertStringContainsString('101–105 of 105', $html);
@@ -171,6 +175,58 @@ final class ReportControllerTest extends FunctionalTestCase
             self::assertStringNotContainsString('Type-100', $html);
             self::assertLessThan(strpos($html, 'Type-105'), strpos($html, 'Type-101'));
         }
+    }
+
+    public function testFiltersAffectOverviewAndDetailsAndRemainInLinks(): void
+    {
+        $connection = $this->get(ConnectionPool::class)->getConnectionForTable('tt_content');
+        $connection->insert('tt_content', ['CType' => 'text', 'header' => 'Matching content', 'sys_language_uid' => 0, 't3ver_wsid' => 0]);
+        $connection->insert('tt_content', ['CType' => 'text', 'header' => 'Other language', 'sys_language_uid' => -1, 't3ver_wsid' => 0]);
+        $connection->insert('tt_content', ['CType' => 'text', 'header' => 'Other workspace', 'sys_language_uid' => 0, 't3ver_wsid' => 2]);
+
+        $controller = $this->get(ReportController::class);
+        $filters = ['language' => '0', 'workspace' => '0'];
+        $html = (string)$controller->processRequest($this->request('ctypes', $filters))->getBody();
+        $document = new \DOMDocument();
+        @$document->loadHTML($html);
+        $xpath = new \DOMXPath($document);
+        self::assertSame('1', trim($xpath->query('//tr[td[normalize-space()="text"]]/td[4]')->item(0)->textContent));
+        foreach ($xpath->query('//tr[td[normalize-space()="text"]]//a') as $link) {
+            parse_str(parse_url($link->getAttribute('href'), PHP_URL_QUERY), $parameters);
+            self::assertSame('0', $parameters['language']);
+            self::assertSame('0', $parameters['workspace']);
+        }
+
+        $parameters = ['ctype' => 'text', 'status' => 'active'] + $filters;
+        $html = (string)$controller->processRequest($this->request('ctypeDetail', $parameters))->getBody();
+        self::assertStringContainsString('Matching content', $html);
+        self::assertStringNotContainsString('Other language', $html);
+        self::assertStringNotContainsString('Other workspace', $html);
+        self::assertStringContainsString('1–1 of 1', $html);
+        // A later request without explicit filters restores this screen's choice.
+        $html = (string)$controller->processRequest($this->request('ctypeDetail', ['ctype' => 'text', 'status' => 'active']))->getBody();
+        self::assertStringContainsString('1–1 of 1', $html);
+        $html = (string)$controller->processRequest($this->request('ctypeDetail', $parameters + ['page' => 99])->withParsedBody(['language' => 'all', 'workspace' => 'all']))->getBody();
+        self::assertStringContainsString('1–3 of 3', $html);
+        $html = (string)$controller->processRequest($this->request('ctypeDetail', ['ctype' => 'text', 'status' => 'active', 'language' => ['bad'], 'workspace' => '999']))->getBody();
+        self::assertStringContainsString('1–3 of 3', $html);
+    }
+
+    public function testFilterPreferencesAreIndependentAcrossUsersAndScreens(): void
+    {
+        $resolver = new FilterPreferences();
+        $options = ['all' => 'All', 0 => 'Zero', 1 => 'One'];
+        $user = $GLOBALS['BE_USER'];
+        $resolver->resolve($this->request('ctypes', ['language' => '1', 'workspace' => '0']), 'ctypes', $user, $options, $options);
+        $user = $this->setUpBackendUser(1);
+        self::assertSame(['language' => 1, 'workspace' => 0], $resolver->resolve($this->request('ctypes'), 'ctypes', $user, $options, $options)->toParameters());
+        foreach (['doktypes', 'ctypeDetail', 'doktypeDetail'] as $screen) {
+            self::assertSame(['language' => 'all', 'workspace' => 'all'], $resolver->resolve($this->request($screen), $screen, $user, $options, $options)->toParameters());
+        }
+
+        $this->get(ConnectionPool::class)->getConnectionForTable('be_users')->insert('be_users', ['uid' => 2, 'username' => 'other-user', 'admin' => 1]);
+        $otherUser = $this->setUpBackendUser(2);
+        self::assertSame(['language' => 'all', 'workspace' => 'all'], $resolver->resolve($this->request('ctypes'), 'ctypes', $otherUser, $options, $options)->toParameters());
     }
 
     private function request(string $action, array $parameters = []): ServerRequest

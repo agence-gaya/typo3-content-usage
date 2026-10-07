@@ -9,6 +9,9 @@ use GAYA\ContentUsage\Domain\Model\Ctype;
 use GAYA\ContentUsage\Domain\Model\Doktype;
 use GAYA\ContentUsage\Domain\Repository\ContentRepository;
 use GAYA\ContentUsage\Domain\Repository\PageRepository;
+use GAYA\ContentUsage\Filter\FilterOptions;
+use GAYA\ContentUsage\Filter\FilterPreferences;
+use GAYA\ContentUsage\Filter\RecordFilters;
 use GAYA\ContentUsage\Pagination\ListPagination;
 use GAYA\ContentUsage\Pagination\PageSizePreference;
 use Psr\Http\Message\ResponseInterface;
@@ -28,6 +31,8 @@ class ReportController
 
     protected ModuleTemplate $view;
 
+    private RecordFilters $filters;
+
     public function __construct(
         protected readonly ModuleTemplateFactory $moduleTemplateFactory,
         protected readonly UriBuilder $uriBuilder,
@@ -35,6 +40,8 @@ class ReportController
         private readonly PageRepository $pageRepository,
         private readonly ContentRepository $contentRepository,
         private readonly PageSizePreference $pageSizePreference,
+        private readonly FilterOptions $filterOptions,
+        private readonly FilterPreferences $filterPreferences,
     ) {}
 
     public function processRequest(ServerRequestInterface $request): ResponseInterface
@@ -64,6 +71,18 @@ class ReportController
 
         $this->view = $this->moduleTemplateFactory->create($request);
         $this->view->assign('hasRecycler', ExtensionManagementUtility::isLoaded('recycler'));
+
+        if (in_array($routeIdentifier, ['system_contentusage.ctypes', 'system_contentusage.doktypes', 'system_contentusage.ctypeDetail', 'system_contentusage.doktypeDetail'], true)) {
+            $languages = $this->filterOptions->getLanguages();
+            $workspaces = $this->filterOptions->getWorkspaces();
+            $screen = substr($routeIdentifier, strlen('system_contentusage.'));
+            $this->filters = $this->filterPreferences->resolve($request, $screen, $GLOBALS['BE_USER'], $languages, $workspaces);
+            $this->view->assignMultiple([
+                'languageOptions' => $languages,
+                'workspaceOptions' => $workspaces,
+                'filterParameters' => $this->filters->toParameters(),
+            ]);
+        }
 
         switch ($routeIdentifier) {
             case 'system_contentusage.doktypes':
@@ -104,7 +123,7 @@ class ReportController
         $doktypes = $this->tcaConfiguration->getDoktypes();
         $pagination = $this->preparePagination('doktypes', count($doktypes));
         $doktypes = array_slice($doktypes, $pagination->offset, $pagination->limit);
-        $counts = $this->pageRepository->countByTypeAndStatus();
+        $counts = $this->pageRepository->countByTypeAndStatus($this->filters);
         foreach ($doktypes as $doktype) {
             $doktype->setTotalActivePages($counts[$doktype->getId()]['active'] ?? 0);
             $doktype->setTotalDisabledPages($counts[$doktype->getId()]['disabled'] ?? 0);
@@ -121,7 +140,7 @@ class ReportController
         $ctypes = $this->tcaConfiguration->getCtypes();
         $pagination = $this->preparePagination('ctypes', count($ctypes));
         $ctypes = array_slice($ctypes, $pagination->offset, $pagination->limit);
-        $counts = $this->contentRepository->countByTypeAndStatus();
+        $counts = $this->contentRepository->countByTypeAndStatus($this->filters);
         foreach ($ctypes as $ctype) {
             $ctype->setTotalActiveContents($counts[$ctype->getId()]['active'] ?? 0);
             $ctype->setTotalDisabledContents($counts[$ctype->getId()]['disabled'] ?? 0);
@@ -136,9 +155,9 @@ class ReportController
     public function doktypeDetailAction(Doktype $doktype, string $status): ResponseInterface
     {
         $suffix = ucfirst($status);
-        $total = $this->pageRepository->{'count' . $suffix . 'ByDoktype'}($doktype);
+        $total = $this->pageRepository->{'count' . $suffix . 'ByDoktype'}($doktype, $this->filters);
         $pagination = $this->preparePagination('doktypeDetail', $total, ['doktype' => $doktype->getId(), 'status' => $status]);
-        $doktype->{'set' . $suffix . 'Pages'}($this->pageRepository->{'find' . $suffix . 'ByDoktype'}($doktype, $pagination->limit, $pagination->offset));
+        $doktype->{'set' . $suffix . 'Pages'}($this->pageRepository->{'find' . $suffix . 'ByDoktype'}($doktype, $pagination->limit, $pagination->offset, $this->filters));
         $doktype->{'setTotal' . $suffix . 'Pages'}($total);
 
         $this->view->assign('doktype', $doktype);
@@ -150,9 +169,9 @@ class ReportController
     public function ctypeDetailAction(Ctype $ctype, string $status): ResponseInterface
     {
         $suffix = ucfirst($status);
-        $total = $this->contentRepository->{'count' . $suffix . 'ByCtype'}($ctype);
+        $total = $this->contentRepository->{'count' . $suffix . 'ByCtype'}($ctype, $this->filters);
         $pagination = $this->preparePagination('ctypeDetail', $total, ['ctype' => $ctype->getId(), 'status' => $status]);
-        $ctype->{'set' . $suffix . 'Contents'}($this->contentRepository->{'find' . $suffix . 'ByCtype'}($ctype, $pagination->limit, $pagination->offset));
+        $ctype->{'set' . $suffix . 'Contents'}($this->contentRepository->{'find' . $suffix . 'ByCtype'}($ctype, $pagination->limit, $pagination->offset, $this->filters));
         $ctype->{'setTotal' . $suffix . 'Contents'}($total);
 
         $this->view->assign('ctype', $ctype);
@@ -167,11 +186,13 @@ class ReportController
         $query = $this->request->getQueryParams();
         $body = $this->request->getParsedBody();
         $changedSize = array_key_exists('itemsPerPage', is_array($body) ? $body : []) || array_key_exists('itemsPerPage', $query);
-        $pagination = new ListPagination($total, $size, $changedSize ? 1 : ($query['page'] ?? 1));
+        $changedFilters = is_array($body) && (array_key_exists('language', $body) || array_key_exists('workspace', $body));
+        $pagination = new ListPagination($total, $size, ($changedSize || $changedFilters) ? 1 : ($query['page'] ?? 1));
         $this->view->assignMultiple([
             'pagination' => $pagination,
             'paginationRoute' => 'system_contentusage.' . $screen,
-            'paginationParameters' => $parameters,
+            'paginationParameters' => $parameters + $this->filters->toParameters(),
+            'filterRouteParameters' => $parameters,
         ]);
         return $pagination;
     }
