@@ -2,7 +2,7 @@
   "name": "gaya/typo3-content-usage",
   "description": "Content usage analysis",
   "type": "typo3-cms-extension",
-  "license": "GPL-2.0+",
+  "license": "LGPL-3.0-or-later",
   "version": "14.0.1",
   "keywords": [
     "typo3",
