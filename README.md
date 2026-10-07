@@ -1,4 +1,5 @@
 [![TYPO3 14](https://img.shields.io/badge/TYPO3-14-orange.svg?style=flat-square)](https://get.typo3.org/version/14)
+[![ci](https://github.com/agence-gaya/typo3-content-usage/actions/workflows/ci.yml/badge.svg)](https://github.com/agence-gaya/typo3-content-usage/actions/workflows/ci.yml)
 [![License](https://poser.pugx.org/gaya/typo3-content-usage/license)](https://packagist.org/packages/gaya/typo3-content-usage)
 
 # ext:content-usage
