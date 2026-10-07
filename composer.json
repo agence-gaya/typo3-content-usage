@@ -12,6 +12,10 @@
     "doktype",
     "ctype"
   ],
+  "homepage": "https://github.com/agence-gaya/typo3-content-usage",
+  "support": {
+    "issues": "https://github.com/agence-gaya/typo3-content-usage/issues"
+  },
   "authors": [
     {
       "name": "GAYA",
