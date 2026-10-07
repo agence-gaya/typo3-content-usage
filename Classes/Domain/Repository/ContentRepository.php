@@ -27,11 +27,13 @@ class ContentRepository extends AbstractRepository
     /**
      * @return Content[]
      */
-    public function findActiveByCtype(Ctype $ctype): array
+    public function findActiveByCtype(Ctype $ctype, ?int $limit = null, int $offset = 0): array
     {
         $queryBuilder = $this->getQueryBuilder('active');
         $this->addConstraintsForCtype($queryBuilder, $ctype);
         $queryBuilder->select('uid', 'pid', 'header', 'CType', 'sys_language_uid', 't3ver_wsid');
+
+        $queryBuilder->orderBy('uid')->setMaxResults($limit)->setFirstResult($offset);
 
         return $this->dataMapper->map(Content::class, $queryBuilder->executeQuery()->fetchAllAssociative());
     }
@@ -48,11 +50,13 @@ class ContentRepository extends AbstractRepository
     /**
      * @return Content[]
      */
-    public function findDisabledByCtype(Ctype $ctype): array
+    public function findDisabledByCtype(Ctype $ctype, ?int $limit = null, int $offset = 0): array
     {
         $queryBuilder = $this->getQueryBuilder('disabled');
         $this->addConstraintsForCtype($queryBuilder, $ctype);
         $queryBuilder->select('uid', 'pid', 'header', 'CType', 'sys_language_uid', 't3ver_wsid');
+
+        $queryBuilder->orderBy('uid')->setMaxResults($limit)->setFirstResult($offset);
 
         return $this->dataMapper->map(Content::class, $queryBuilder->executeQuery()->fetchAllAssociative());
     }
@@ -69,13 +73,20 @@ class ContentRepository extends AbstractRepository
     /**
      * @return Content[]
      */
-    public function findDeletedByCtype(Ctype $ctype): array
+    public function findDeletedByCtype(Ctype $ctype, ?int $limit = null, int $offset = 0): array
     {
         $queryBuilder = $this->getQueryBuilder('deleted');
         $this->addConstraintsForCtype($queryBuilder, $ctype);
         $queryBuilder->select('uid', 'pid', 'header', 'CType', 'sys_language_uid', 't3ver_wsid');
 
+        $queryBuilder->orderBy('uid')->setMaxResults($limit)->setFirstResult($offset);
+
         return $this->dataMapper->map(Content::class, $queryBuilder->executeQuery()->fetchAllAssociative());
+    }
+
+    public function countByTypeAndStatus(): array
+    {
+        return $this->getCountsByTypeAndStatus('CType');
     }
 
     private function addConstraintsForCtype(QueryBuilder $queryBuilder, Ctype $ctype): void

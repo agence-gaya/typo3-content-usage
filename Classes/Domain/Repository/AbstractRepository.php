@@ -40,6 +40,21 @@ abstract class AbstractRepository
         return $queryBuilder;
     }
 
+    protected function getCountsByTypeAndStatus(string $field): array
+    {
+        $counts = [];
+        foreach (['active', 'disabled', 'deleted'] as $status) {
+            $queryBuilder = $this->getQueryBuilder($status);
+            $rows = $queryBuilder->select($field)->addSelectLiteral('COUNT(*) AS total')->groupBy($field)
+                ->executeQuery()->fetchAllAssociative();
+            foreach ($rows as $row) {
+                $counts[$row[$field]][$status] = (int)$row['total'];
+            }
+        }
+
+        return $counts;
+    }
+
     private function getActiveConstraints(QueryBuilder $queryBuilder): CompositeExpression
     {
         return $queryBuilder->expr()->and(

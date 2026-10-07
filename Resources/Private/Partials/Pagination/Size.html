@@ -1,0 +1,16 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<f:asset.module identifier="@typo3/backend/global-event-handler.js" />
+<form action="{f:be.uri(route: route, parameters: parameters)}" method="post" class="mb-3">
+    <label for="items-per-page" class="form-label">Records per page</label>
+    <select id="items-per-page" name="itemsPerPage" class="form-select w-auto" data-global-event="change" data-action-submit="$form">
+        <f:for each="{0: 50, 1: 100, 2: 500, 3: 1000, 4: 'all'}" as="size">
+            <f:if condition="{pagination.pageSize} == {size}">
+                <f:then><option value="{size}" selected="selected">{f:if(condition: '{size} == all', then: 'All', else: size)}</option></f:then>
+                <f:else><option value="{size}">{f:if(condition: '{size} == all', then: 'All', else: size)}</option></f:else>
+            </f:if>
+        </f:for>
+    </select>
+    <noscript><button type="submit" class="btn btn-default">Apply</button></noscript>
+</form>
+<p class="pagination-summary">{pagination.start}–{pagination.end} of {pagination.total}</p>
+</html>

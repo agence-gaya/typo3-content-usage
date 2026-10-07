@@ -28,11 +28,13 @@ class PageRepository extends AbstractRepository
     /**
      * @return Page[]
      */
-    public function findActiveByDoktype(Doktype $doktype): array
+    public function findActiveByDoktype(Doktype $doktype, ?int $limit = null, int $offset = 0): array
     {
         $queryBuilder = $this->getQueryBuilder('active');
         $this->addConstraintsForDoktype($queryBuilder, $doktype);
         $queryBuilder->select('uid', 'title', 'doktype', 'sys_language_uid', 't3ver_wsid');
+
+        $queryBuilder->orderBy('uid')->setMaxResults($limit)->setFirstResult($offset);
 
         return $this->dataMapper->map(Page::class, $queryBuilder->executeQuery()->fetchAllAssociative());
     }
@@ -49,11 +51,13 @@ class PageRepository extends AbstractRepository
     /**
      * @return Page[]
      */
-    public function findDisabledByDoktype(Doktype $doktype): array
+    public function findDisabledByDoktype(Doktype $doktype, ?int $limit = null, int $offset = 0): array
     {
         $queryBuilder = $this->getQueryBuilder('disabled');
         $this->addConstraintsForDoktype($queryBuilder, $doktype);
         $queryBuilder->select('uid', 'title', 'doktype', 'sys_language_uid', 't3ver_wsid');
+
+        $queryBuilder->orderBy('uid')->setMaxResults($limit)->setFirstResult($offset);
 
         return $this->dataMapper->map(Page::class, $queryBuilder->executeQuery()->fetchAllAssociative());
     }
@@ -70,13 +74,20 @@ class PageRepository extends AbstractRepository
     /**
      * @return Page[]
      */
-    public function findDeletedByDoktype(Doktype $doktype): array
+    public function findDeletedByDoktype(Doktype $doktype, ?int $limit = null, int $offset = 0): array
     {
         $queryBuilder = $this->getQueryBuilder('deleted');
         $this->addConstraintsForDoktype($queryBuilder, $doktype);
         $queryBuilder->select('uid', 'title', 'doktype', 'sys_language_uid', 't3ver_wsid');
 
+        $queryBuilder->orderBy('uid')->setMaxResults($limit)->setFirstResult($offset);
+
         return $this->dataMapper->map(Page::class, $queryBuilder->executeQuery()->fetchAllAssociative());
+    }
+
+    public function countByTypeAndStatus(): array
+    {
+        return $this->getCountsByTypeAndStatus('doktype');
     }
 
     private function addConstraintsForDoktype(QueryBuilder $queryBuilder, Doktype $doktype): void

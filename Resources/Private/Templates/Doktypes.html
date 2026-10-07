@@ -13,6 +13,9 @@
 
     <f:render partial="BackButton" arguments="{route: 'system_contentusage.main'}" />
 
+    <f:render partial="Pagination/Size" arguments="{pagination: pagination, route: paginationRoute, parameters: paginationParameters}" />
+    <f:render partial="Pagination/Navigation" arguments="{pagination: pagination, route: paginationRoute, parameters: paginationParameters}" />
+
     <div class="table-fit">
         <table class="table table-striped table-hover">
             <thead>
@@ -58,6 +61,8 @@
             </tbody>
         </table>
     </div>
+
+    <f:render partial="Pagination/Navigation" arguments="{pagination: pagination, route: paginationRoute, parameters: paginationParameters}" />
 
     <f:render partial="BackButton" arguments="{route: 'system_contentusage.main'}" />
 

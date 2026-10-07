@@ -13,6 +13,9 @@
 
     <f:render partial="BackButton" arguments="{route: 'system_contentusage.ctypes'}" />
 
+    <f:render partial="Pagination/Size" arguments="{pagination: pagination, route: paginationRoute, parameters: paginationParameters}" />
+    <f:render partial="Pagination/Navigation" arguments="{pagination: pagination, route: paginationRoute, parameters: paginationParameters}" />
+
     <f:switch expression="{status}">
         <f:case value="active"><f:render section="TableContent" arguments="{contents: ctype.activeContents, status: status}" /></f:case>
         <f:case value="disabled">
@@ -21,6 +24,8 @@
         </f:case>
         <f:case value="deleted"><f:render section="TableContent" arguments="{contents: ctype.deletedContents, status: status, hasRecycler: hasRecycler}" /></f:case>
     </f:switch>
+
+    <f:render partial="Pagination/Navigation" arguments="{pagination: pagination, route: paginationRoute, parameters: paginationParameters}" />
 
     <f:render partial="BackButton" arguments="{route: 'system_contentusage.ctypes'}" />
 

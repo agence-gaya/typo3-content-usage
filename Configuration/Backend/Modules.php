@@ -12,6 +12,12 @@ return [
         'path' => '/module/system/contentusage',
         'labels' => 'content_usage.modules.main',
         'extensionName' => 'ContentUsage',
+        'moduleData' => [
+            'ctypesPageSize' => 100,
+            'doktypesPageSize' => 100,
+            'ctypeDetailPageSize' => 100,
+            'doktypeDetailPageSize' => 100,
+        ],
         'routes' => [
             '_default' => [
                 'target' => ReportController::class . '::processRequest',

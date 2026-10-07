@@ -89,6 +89,29 @@ final class UsageRepositoryTest extends FunctionalTestCase
             }
         }
 
+        // Keep the summary query budget independent of the number of types and records.
+        $countingRepository = $this->getMockBuilder($repositoryClass)
+            ->setConstructorArgs([$this->get(DataMapper::class), $context])
+            ->onlyMethods(['getQueryBuilder'])->getMock();
+        $queryMethod = new \ReflectionMethod($repositoryClass, 'getQueryBuilder');
+        $countingRepository->expects($this->exactly(3))->method('getQueryBuilder')
+            ->willReturnCallback(static fn(string $status) => $queryMethod->invoke($repository, $status));
+        $grouped = $countingRepository->countByTypeAndStatus();
+        foreach ($expected as $status => $expectedUids) {
+            self::assertSame(count($expectedUids), $grouped[$typeId][strtolower($status)]);
+            self::assertSame(1, $grouped[$otherTypeId][strtolower($status)]);
+            $allUids = [];
+            $counter = count($expectedUids);
+            for ($offset = 0; $offset < $counter; $offset += 5) {
+                $records = $repository->{'find' . $status . 'By' . $methodSuffix}($type, 5, $offset);
+                self::assertLessThanOrEqual(5, count($records));
+                array_push($allUids, ...array_map(static fn($record) => $record->getUid(), $records));
+            }
+
+            self::assertSame($expectedUids, $allUids);
+            self::assertSame([], $repository->{'find' . $status . 'By' . $methodSuffix}($type, 5, 1000));
+        }
+
         $type->setId($table === 'pages' ? 999 : 'unused');
         foreach (array_keys($expected) as $status) {
             self::assertSame(0, $repository->{'count' . $status . 'By' . $methodSuffix}($type));

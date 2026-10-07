@@ -1,0 +1,22 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<f:if condition="{pagination.numberOfPages} > 1">
+    <nav aria-label="Pagination">
+        <ul class="pagination">
+            <f:if condition="{pagination.page} > 1">
+                <li class="page-item"><f:be.link route="{route}" parameters="{f:merge(array: parameters, with: {page: 1})}" class="page-link">First</f:be.link></li>
+                <li class="page-item"><f:be.link route="{route}" parameters="{f:merge(array: parameters, with: {page: pagination.previous})}" class="page-link">Previous</f:be.link></li>
+            </f:if>
+            <f:for each="{pagination.pages}" as="page">
+                <f:if condition="{page} == {pagination.page}">
+                    <f:then><li class="page-item active"><span class="page-link" aria-current="page">{page}</span></li></f:then>
+                    <f:else><li class="page-item"><f:be.link route="{route}" parameters="{f:merge(array: parameters, with: {page: page})}" class="page-link">{page}</f:be.link></li></f:else>
+                </f:if>
+            </f:for>
+            <f:if condition="{pagination.page} < {pagination.numberOfPages}">
+                <li class="page-item"><f:be.link route="{route}" parameters="{f:merge(array: parameters, with: {page: pagination.next})}" class="page-link">Next</f:be.link></li>
+                <li class="page-item"><f:be.link route="{route}" parameters="{f:merge(array: parameters, with: {page: pagination.numberOfPages})}" class="page-link">Last</f:be.link></li>
+            </f:if>
+        </ul>
+    </nav>
+</f:if>
+</html>

@@ -8,6 +8,7 @@ use GAYA\ContentUsage\Configuration\TcaConfiguration;
 use GAYA\ContentUsage\Controller\ReportController;
 use GAYA\ContentUsage\Domain\Repository\ContentRepository;
 use GAYA\ContentUsage\Domain\Repository\PageRepository;
+use GAYA\ContentUsage\Pagination\PageSizePreference;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
@@ -36,6 +37,7 @@ final class ReportControllerTest extends TestCase
             $tcaConfiguration,
             self::createStub(PageRepository::class),
             self::createStub(ContentRepository::class),
+            new PageSizePreference(),
         );
         $request = (new ServerRequest())->withQueryParams($parameters)->withAttribute(
             'route',
