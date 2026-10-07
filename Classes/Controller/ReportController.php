@@ -37,29 +37,48 @@ class ReportController
     public function processRequest(ServerRequestInterface $request): ResponseInterface
     {
         $this->request = $request;
+        /** @var Route $route */
+        $route = $request->getAttribute('route');
+        $routeIdentifier = $route->getOption('_identifier');
+        $queryParams = $request->getQueryParams();
+
+        if (in_array($routeIdentifier, ['system_contentusage.doktypeDetail', 'system_contentusage.ctypeDetail'], true)) {
+            $status = $queryParams['status'] ?? null;
+            $type = $queryParams[$routeIdentifier === 'system_contentusage.doktypeDetail' ? 'doktype' : 'ctype'] ?? null;
+
+            if (!in_array($status, ['active', 'disabled', 'deleted'], true)) {
+                return new RedirectResponse((string)$this->uriBuilder->buildUriFromRoute('system_contentusage'));
+            }
+
+            if ($routeIdentifier === 'system_contentusage.doktypeDetail') {
+                if ((!is_string($type) && !is_int($type)) || filter_var($type, FILTER_VALIDATE_INT) === false) {
+                    return new RedirectResponse((string)$this->uriBuilder->buildUriFromRoute('system_contentusage'));
+                }
+            } elseif (!is_string($type) || $type === '') {
+                return new RedirectResponse((string)$this->uriBuilder->buildUriFromRoute('system_contentusage'));
+            }
+        }
+
         $this->view = $this->moduleTemplateFactory->create($request);
         $this->view->assign('hasRecycler', ExtensionManagementUtility::isLoaded('recycler'));
 
-        /** @var Route $route */
-        $route = $request->getAttribute('route');
-
-        switch ($route->getOption('_identifier')) {
+        switch ($routeIdentifier) {
             case 'system_contentusage.doktypes':
                 return $this->doktypesAction();
             case 'system_contentusage.ctypes':
                 return $this->ctypesAction();
             case 'system_contentusage.doktypeDetail':
                 foreach ($this->tcaConfiguration->getDoktypes() as $doktype) {
-                    if ($doktype->getId() === (int)$request->getQueryParams()['doktype']) {
-                        return $this->doktypeDetailAction($doktype, $request->getQueryParams()['status']);
+                    if ($doktype->getId() === (int)$queryParams['doktype']) {
+                        return $this->doktypeDetailAction($doktype, $queryParams['status']);
                     }
                 }
 
                 break;
             case 'system_contentusage.ctypeDetail':
                 foreach ($this->tcaConfiguration->getCtypes() as $ctype) {
-                    if ($ctype->getId() === $request->getQueryParams()['ctype']) {
-                        return $this->ctypeDetailAction($ctype, $request->getQueryParams()['status']);
+                    if ($ctype->getId() === $queryParams['ctype']) {
+                        return $this->ctypeDetailAction($ctype, $queryParams['status']);
                     }
                 }
 
