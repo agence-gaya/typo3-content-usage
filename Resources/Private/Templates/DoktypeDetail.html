@@ -15,7 +15,7 @@
     <f:switch expression="{status}">
         <f:case value="active"><f:render section="TableContent" arguments="{pages: doktype.activePages, status: status}" /></f:case>
         <f:case value="disabled">
-            <p>Note: a page with a past publication date is classified as disabled.</p>
+            <p>Disabled pages are records that are not deleted and are either hidden or have reached their publication end date.</p>
             <f:render section="TableContent" arguments="{pages: doktype.disabledPages, status: status}" />
         </f:case>
         <f:case value="deleted"><f:render section="TableContent" arguments="{pages: doktype.deletedPages, status: status, hasRecycler: hasRecycler}" /></f:case>
