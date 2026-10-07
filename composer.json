@@ -1,66 +1,66 @@
 {
-  "name": "gaya/typo3-content-usage",
-  "description": "Content usage analysis",
-  "type": "typo3-cms-extension",
-  "license": "LGPL-3.0-or-later",
-  "version": "14.0.1",
-  "keywords": [
-    "typo3",
-    "content",
-    "usage",
-    "report",
-    "doktype",
-    "ctype"
-  ],
-  "homepage": "https://github.com/agence-gaya/typo3-content-usage",
-  "support": {
-    "issues": "https://github.com/agence-gaya/typo3-content-usage/issues"
-  },
-  "authors": [
-    {
-      "name": "GAYA",
-      "email": "contact@gaya.fr",
-      "homepage": "https://www.gaya.fr",
-      "role": "maintainer"
-    }
-  ],
-  "require": {
-    "php": "^8.2",
-    "typo3/cms-core": "^14.0",
-    "typo3/cms-extbase": "^14.0"
-  },
-  "require-dev": {
-    "typo3/cms-install": "^14.3",
-    "gaya/typo3-coder": "^14.1"
-  },
-  "autoload": {
-    "psr-4": {
-      "GAYA\\ContentUsage\\": "Classes/"
-    }
-  },
-  "extra": {
-    "typo3/cms": {
-      "extension-key": "content_usage",
-      "web-dir": ".build/web"
-    }
-  },
-  "config": {
-    "bin-dir": ".build/bin",
-    "sort-packages": true,
-    "vendor-dir": ".build/vendor",
-    "allow-plugins": {
-      "a9f/fractor-extension-installer": true,
-      "typo3/cms-composer-installers": true,
-      "typo3/class-alias-loader": true,
-      "gaya/typo3-coder": true
-    }
-  },
-  "scripts": {
-    "post-autoload-dump": [
-      "mkdir -p .build/packages/",
-      "[ -L .build/packages/content_usage ] || ln -snvf ../../. .build/packages/content_usage"
-    ]
-  },
-  "prefer-stable": true,
-  "minimum-stability": "dev"
+	"name": "gaya/typo3-content-usage",
+	"description": "Content usage analysis",
+	"type": "typo3-cms-extension",
+	"license": "LGPL-3.0-or-later",
+	"version": "14.0.1",
+	"keywords": [
+		"typo3",
+		"content",
+		"usage",
+		"report",
+		"doktype",
+		"ctype"
+	],
+	"homepage": "https://github.com/agence-gaya/typo3-content-usage",
+	"support": {
+		"issues": "https://github.com/agence-gaya/typo3-content-usage/issues"
+	},
+	"authors": [
+		{
+			"name": "GAYA",
+			"email": "contact@gaya.fr",
+			"homepage": "https://www.gaya.fr",
+			"role": "maintainer"
+		}
+	],
+	"require": {
+		"php": "^8.2",
+		"typo3/cms-core": "^14.0",
+		"typo3/cms-extbase": "^14.0"
+	},
+	"require-dev": {
+		"typo3/cms-install": "^14.3",
+		"gaya/typo3-coder": "^14.1"
+	},
+	"autoload": {
+		"psr-4": {
+			"GAYA\\ContentUsage\\": "Classes/"
+		}
+	},
+	"extra": {
+		"typo3/cms": {
+			"extension-key": "content_usage",
+			"web-dir": ".build/web"
+		}
+	},
+	"config": {
+		"bin-dir": ".build/bin",
+		"sort-packages": true,
+		"vendor-dir": ".build/vendor",
+		"allow-plugins": {
+			"a9f/fractor-extension-installer": true,
+			"typo3/cms-composer-installers": true,
+			"typo3/class-alias-loader": true,
+			"gaya/typo3-coder": true
+		}
+	},
+	"scripts": {
+		"post-autoload-dump": [
+			"mkdir -p .build/packages/",
+			"[ -L .build/packages/content_usage ] || ln -snvf ../../. .build/packages/content_usage"
+		]
+	},
+	"prefer-stable": true,
+	"minimum-stability": "dev"
 }

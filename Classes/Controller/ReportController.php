@@ -50,7 +50,7 @@ class ReportController
                 return $this->ctypesAction();
             case 'system_contentusage.doktypeDetail':
                 foreach ($this->tcaConfiguration->getDoktypes() as $doktype) {
-                    if ($doktype->getId() === (int) $request->getQueryParams()['doktype']) {
+                    if ($doktype->getId() === (int)$request->getQueryParams()['doktype']) {
                         return $this->doktypeDetailAction($doktype, $request->getQueryParams()['status']);
                     }
                 }
@@ -69,7 +69,7 @@ class ReportController
         }
 
         // If we are here, there was a problem
-        return new RedirectResponse((string) $this->uriBuilder->buildUriFromRoute('system_contentusage'));
+        return new RedirectResponse((string)$this->uriBuilder->buildUriFromRoute('system_contentusage'));
     }
 
     public function mainAction(): ResponseInterface

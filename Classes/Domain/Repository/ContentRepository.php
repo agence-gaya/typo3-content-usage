@@ -21,7 +21,7 @@ class ContentRepository extends AbstractRepository
         $this->addConstraintsForCtype($queryBuilder, $ctype);
         $queryBuilder->selectLiteral('count(*)');
 
-        return (int) $queryBuilder->executeQuery()->fetchNumeric()[0];
+        return (int)$queryBuilder->executeQuery()->fetchNumeric()[0];
     }
 
     /**
@@ -42,7 +42,7 @@ class ContentRepository extends AbstractRepository
         $this->addConstraintsForCtype($queryBuilder, $ctype);
         $queryBuilder->selectLiteral('count(*)');
 
-        return (int) $queryBuilder->executeQuery()->fetchNumeric()[0];
+        return (int)$queryBuilder->executeQuery()->fetchNumeric()[0];
     }
 
     /**
@@ -63,7 +63,7 @@ class ContentRepository extends AbstractRepository
         $this->addConstraintsForCtype($queryBuilder, $ctype);
         $queryBuilder->selectLiteral('count(*)');
 
-        return (int) $queryBuilder->executeQuery()->fetchNumeric()[0];
+        return (int)$queryBuilder->executeQuery()->fetchNumeric()[0];
     }
 
     /**

@@ -33,7 +33,7 @@ class TcaConfiguration
             }
 
             $doktype = new Doktype();
-            $doktype->setId((int) $doktypeItem['value']);
+            $doktype->setId((int)$doktypeItem['value']);
             $doktype->setLabel($this->getTranslation($doktypeItem['label']));
             $doktype->setIcon($doktypeItem['icon'] ?? '');
 
